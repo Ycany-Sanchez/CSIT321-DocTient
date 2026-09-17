@@ -1,0 +1,284 @@
+﻿@page "/dashboard"
+@inject NavigationManager Nav
+
+<div class="dashboard-page">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <!-- Logo -->
+        <div class="sidebar-logo">
+            <a href="/" class="logo-link">
+                <div class="logo-icon">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                </div>
+                <span class="logo-text">DocTient</span>
+            </a>
+        </div>
+        <!-- Patient -->
+        <div class="sidebar-user">
+            <div class="sidebar-user-inner">
+                <div class="user-avatar">AR</div>
+                <div class="user-info">
+                    <p class="user-name">Alex Reyes</p>
+                    <p class="user-role">Patient</p>
+                </div>
+            </div>
+        </div>
+        <!-- Nav -->
+        <nav class="sidebar-nav">
+            @foreach (var item in SidebarItems)
+            {
+                <a href="@item.Href" class="sidebar-nav-item @(item.Active ? "active" : "")">
+                    <span class="sidebar-nav-icon">@item.Icon</span>
+                    @item.Label
+                </a>
+            }
+        </nav>
+        <!-- Logout -->
+        <div class="sidebar-logout">
+            <button @onclick='() => Nav.NavigateTo("/login")' class="btn-logout">
+                <span>🚪</span> Sign Out
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main -->
+    <div class="dashboard-main">
+
+        <!-- Top bar -->
+        <header class="topbar">
+            <div class="topbar-inner">
+                <div>
+                    <p class="topbar-greeting">Good morning, Alex 👋</p>
+                    <p class="topbar-date">@DateTime.Now.ToString("dddd, MMMM d, yyyy")</p>
+                </div>
+                <div class="topbar-actions">
+                    <button class="btn-icon">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                        <span class="notif-dot"></span>
+                    </button>
+                    <div class="topbar-avatar">AR</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <main class="dashboard-content">
+
+            <!-- Vitals Cards -->
+            <div>
+                <div class="content-section-header">
+                    <h2 class="content-section-title">Today's Vitals</h2>
+                    <span class="content-section-meta">Last logged: 7:30 AM today</span>
+                </div>
+                <div class="vitals-grid">
+                    @foreach (var v in Vitals)
+                    {
+                        <div class="vital-card">
+                            <div class="vital-card-icon">@v.Icon</div>
+                            <p class="vital-card-label">@v.Label</p>
+                            <p class="vital-card-value">@v.Value</p>
+                            <p class="vital-card-unit">@v.Unit</p>
+                            <span class="vital-badge @v.BadgeClass">@v.Status</span>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Doctor + Quick Actions row -->
+            <div class="two-col-row">
+                <!-- Doctor card -->
+                <div class="dash-card">
+                    <p class="card-section-label">Your Doctor</p>
+                    <div class="doctor-row">
+                        <div class="doctor-avatar-lg">RC</div>
+                        <div class="doctor-info-block">
+                            <p class="doctor-card-name">Dr. Rafael Cruz</p>
+                            <p class="doctor-card-specialty">General Practitioner · Makati Med</p>
+                            <div class="doctor-status">
+                                <span class="status-dot"></span>
+                                <span class="status-text">Online</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="doctor-message">
+                        "Your blood pressure looks good this week — keep logging daily!"
+                    </p>
+                    <p class="doctor-message-time">Today, 9:12 AM</p>
+                </div>
+
+                <!-- Quick actions -->
+                <div class="dash-card">
+                    <p class="card-section-label">Quick Actions</p>
+                    <div class="quick-actions-list">
+                        @foreach (var a in QuickActions)
+                        {
+                            <button class="btn-quick-action">
+                                <span class="quick-action-icon">@a.Icon</span>
+                                @a.Label
+                            </button>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trend Chart -->
+            <div class="dash-card">
+                <div class="chart-header">
+                    <div>
+                        <p class="chart-title">Heart Rate — 7-day Trend</p>
+                        <p class="chart-subtitle">bpm · last 7 days</p>
+                    </div>
+                    <span class="chart-badge">Avg 74 bpm</span>
+                </div>
+                <div class="chart-wrap">
+                    <svg viewBox="0 0 560 120" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Grid lines -->
+                        <line x1="0" y1="20" x2="560" y2="20" stroke="#f1f5f9" stroke-width="1"/>
+                        <line x1="0" y1="60" x2="560" y2="60" stroke="#f1f5f9" stroke-width="1"/>
+                        <line x1="0" y1="100" x2="560" y2="100" stroke="#f1f5f9" stroke-width="1"/>
+                        <!-- Gradient fill -->
+                        <defs>
+                            <linearGradient id="hrGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#0d7cba" stop-opacity="0.18"/>
+                                <stop offset="100%" stop-color="#0d7cba" stop-opacity="0"/>
+                            </linearGradient>
+                        </defs>
+                        <polygon points="0,80 80,60 160,70 240,50 320,55 400,45 480,65 560,60 560,120 0,120" fill="url(#hrGrad)"/>
+                        <!-- Line -->
+                        <polyline points="0,80 80,60 160,70 240,50 320,55 400,45 480,65 560,60"
+                                  fill="none" stroke="#0d7cba" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <!-- Points -->
+                        <circle cx="0"   cy="80" r="4" fill="#0d7cba"/>
+                        <circle cx="80"  cy="60" r="4" fill="#0d7cba"/>
+                        <circle cx="160" cy="70" r="4" fill="#0d7cba"/>
+                        <circle cx="240" cy="50" r="4" fill="#0d7cba"/>
+                        <circle cx="320" cy="55" r="4" fill="#0d7cba"/>
+                        <circle cx="400" cy="45" r="4" fill="#0d7cba"/>
+                        <circle cx="480" cy="65" r="4" fill="#0d7cba"/>
+                        <circle cx="560" cy="60" r="4" fill="#0d7cba"/>
+                        <!-- Labels -->
+                        @foreach (var (day, i) in Days.Select((d, i) => (d, i)))
+                        {
+                            @((MarkupString)$"<text x=\"{i * 80}\" y=\"118\" font-size=\"9\" fill=\"#94a3b8\" text-anchor=\"middle\">{day}</text>")
+                        }
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Recent Health Records -->
+            <div class="records-card">
+                <div class="records-header">
+                    <p class="records-title">Recent Health Records</p>
+                    <span class="records-meta">Last 5 entries</span>
+                </div>
+                @foreach (var r in Records)
+                {
+                    <div class="record-row">
+                        <div class="record-icon">📋</div>
+                        <div class="record-info">
+                            <p class="record-type">@r.Type</p>
+                            <p class="record-date">@r.Date</p>
+                        </div>
+                        <div class="record-right">
+                            <p class="record-value">@r.Value</p>
+                            <span class="record-badge @r.BadgeClass">@r.Status</span>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Medication Reminders -->
+            <div class="meds-card">
+                <div class="meds-header">
+                    <p class="meds-title">Medication Reminders</p>
+                </div>
+                <div class="meds-grid">
+                    @foreach (var m in Meds)
+                    {
+                        <div class="med-item @(m.Taken ? "taken" : "")">
+                            <div class="med-icon @(m.Taken ? "taken" : "")">💊</div>
+                            <div class="med-info">
+                                <p class="med-name">@m.Name</p>
+                                <p class="med-dose">@m.Dose · @m.Time</p>
+                            </div>
+                            @if (m.Taken)
+                            {
+                                <span class="med-taken-label">✓ Taken</span>
+                            }
+                            else
+                            {
+                                <button @onclick="() => m.Taken = true" class="btn-mark-taken">Mark taken</button>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </main>
+    </div>
+</div>
+
+@code {
+    string[] Days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+    record SidebarItem(string Icon, string Label, string Href, bool Active);
+    SidebarItem[] SidebarItems = [
+        new("🏠", "Dashboard",      "/dashboard", true),
+        new("❤️",  "My Health",     "#",          false),
+        new("📋", "Health History", "#",          false),
+        new("💊", "Medications",    "#",          false),
+        new("💬", "Messages",       "#",          false),
+        new("👤", "Profile",        "#",          false),
+    ];
+
+    record VitalCard(string Icon, string Label, string Value, string Unit, string Status, string BadgeClass);
+    VitalCard[] Vitals = [
+        new("❤️",  "Blood Pressure", "118/76", "mmHg", "Normal",  "badge-green"),
+        new("💓", "Heart Rate",     "72",     "bpm",  "Normal",  "badge-green"),
+        new("🌡️", "Temperature",    "36.5",   "°C",   "Normal",  "badge-green"),
+        new("🫁", "Blood Oxygen",   "98",     "%",    "Normal",  "badge-green"),
+        new("⚖️",  "Weight",         "68.2",   "kg",   "Monitor", "badge-amber"),
+    ];
+
+    record QuickAction(string Icon, string Label);
+    QuickAction[] QuickActions = [
+        new("➕", "Log Vitals"),
+        new("💬", "Message Dr. Cruz"),
+        new("📅", "Request Appointment"),
+    ];
+
+    class HealthRecord
+    {
+        public string Type = "";
+        public string Date = "";
+        public string Value = "";
+        public string Status = "";
+        public string BadgeClass = "";
+    }
+    HealthRecord[] Records = [
+        new() { Type = "Blood Pressure", Date = "Sep 17 · 7:30 AM", Value = "118/76 mmHg", Status = "Normal",  BadgeClass = "badge-green" },
+        new() { Type = "Heart Rate",     Date = "Sep 16 · 8:15 AM", Value = "75 bpm",      Status = "Normal",  BadgeClass = "badge-green" },
+        new() { Type = "Blood Oxygen",   Date = "Sep 15 · 7:45 AM", Value = "97%",         Status = "Normal",  BadgeClass = "badge-green" },
+        new() { Type = "Temperature",    Date = "Sep 14 · 9:00 AM", Value = "37.1 °C",     Status = "Monitor", BadgeClass = "badge-amber" },
+        new() { Type = "Weight",         Date = "Sep 13 · 8:00 AM", Value = "68.0 kg",     Status = "Monitor", BadgeClass = "badge-amber" },
+    ];
+
+    class Medication
+    {
+        public string Name = "";
+        public string Dose = "";
+        public string Time = "";
+        public bool Taken = false;
+    }
+    Medication[] Meds = [
+        new() { Name = "Amlodipine", Dose = "5 mg",   Time = "8:00 AM",  Taken = true  },
+        new() { Name = "Metformin",  Dose = "500 mg",  Time = "12:00 PM", Taken = false },
+        new() { Name = "Vitamin D3", Dose = "1000 IU", Time = "8:00 AM",  Taken = true  },
+        new() { Name = "Losartan",   Dose = "25 mg",   Time = "8:00 PM",  Taken = false },
+    ];
+}

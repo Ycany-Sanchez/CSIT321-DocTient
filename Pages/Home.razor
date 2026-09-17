@@ -1,0 +1,191 @@
+﻿@page "/"
+@inject NavigationManager Nav
+
+<div class="home-page">
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="navbar-inner">
+            <!-- Logo -->
+            <a href="/" class="logo-link">
+                <div class="logo-icon">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                </div>
+                <span class="logo-text">DocTient</span>
+            </a>
+            <!-- Nav links -->
+            <nav class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#about">About</a>
+            </nav>
+            <!-- Auth buttons -->
+            <div class="auth-buttons">
+                <button @onclick='() => Nav.NavigateTo("/login")' class="btn-ghost">Sign In</button>
+                <button @onclick='() => Nav.NavigateTo("/signup")' class="btn-primary">Get Started</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <span class="hero-badge">Healthcare Platform</span>
+            <h1 class="hero-title">
+                Connect with<br />your doctor<br /><span class="accent">easily.</span>
+            </h1>
+            <p class="hero-desc">
+                Monitor your vitals, share health data, and stay connected with your doctor — all in one place, between consultations.
+            </p>
+            <div class="hero-cta">
+                <button @onclick='() => Nav.NavigateTo("/signup")' class="btn-hero-primary">
+                    Get Started — It's Free
+                </button>
+                <a href="#features" class="btn-hero-secondary">Learn More</a>
+            </div>
+            <!-- Trust badges -->
+            <div class="trust-badges">
+                <div class="trust-badge"><span class="check">✓</span> HIPAA-aligned</div>
+                <div class="trust-badge"><span class="check">✓</span> End-to-end encrypted</div>
+                <div class="trust-badge"><span class="check">✓</span> Always accessible</div>
+            </div>
+        </div>
+
+        <!-- Hero Card Preview -->
+        <div class="hero-card-wrap">
+            <div class="hero-card">
+                <!-- Vitals preview card -->
+                <div class="vitals-preview">
+                    <div class="vitals-preview-header">
+                        <span class="vitals-preview-label">Today's Vitals</span>
+                        <span class="vitals-preview-date">Sep 17 · 7:30 AM</span>
+                    </div>
+                    @foreach (var v in HeroVitals)
+                    {
+                        <div class="vital-row">
+                            <span class="vital-row-label">@v.Label</span>
+                            <div class="vital-row-right">
+                                <span class="vital-row-value @v.Color">@v.Value</span>
+                                <span class="badge-normal">Normal</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <!-- Doctor preview -->
+                <div class="doctor-preview">
+                    <div class="doctor-avatar">RC</div>
+                    <div class="doctor-info">
+                        <p class="doctor-name">Dr. Rafael Cruz</p>
+                        <p class="doctor-msg">Your blood pressure looks good — keep it up.</p>
+                    </div>
+                    <span class="online-badge">
+                        <span class="online-dot"></span>Online
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="features-section">
+        <div class="features-inner">
+            <div class="section-header">
+                <h2 class="section-title">How DocTient works</h2>
+                <p class="section-desc">A continuous loop between patient and doctor — from logging vitals to receiving feedback.</p>
+            </div>
+            <div class="features-grid">
+                @foreach (var f in Features)
+                {
+                    <div class="feature-card">
+                        <div class="feature-icon">@f.Icon</div>
+                        <h3 class="feature-title">@f.Title</h3>
+                        <p class="feature-desc">@f.Desc</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- About / Trust -->
+    <section id="about" class="about-section">
+        <div class="about-grid">
+            <div>
+                <h2 class="about-title">Built for patients<br />and doctors alike.</h2>
+                <div class="roles-list">
+                    @foreach (var role in Roles)
+                    {
+                        <div>
+                            <p class="role-label">@role.Role</p>
+                            <ul class="role-points">
+                                @foreach (var point in role.Points)
+                                {
+                                    <li class="role-point">
+                                        <span class="check-icon">✓</span>
+                                        @point
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="trust-box">
+                <h3 class="trust-box-title">Secure &amp; Private</h3>
+                <p class="trust-box-desc">Your health data is shared only with your connected doctor — never with third parties.</p>
+                @foreach (var t in TrustPoints)
+                {
+                    <div class="trust-point"><span>🔒</span> @t</div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="cta-inner">
+            <h2 class="cta-title">Ready to get started?</h2>
+            <p class="cta-desc">Join DocTient and stay connected with your healthcare.</p>
+            <div class="cta-buttons">
+                <button @onclick='() => Nav.NavigateTo("/signup")' class="btn-cta-white">Create Account</button>
+                <button @onclick='() => Nav.NavigateTo("/login")' class="btn-cta-outline">Sign In</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p class="footer-brand">DocTient</p>
+        <p>© 2026 DocTient. Connect with your doctor easily.</p>
+    </footer>
+</div>
+
+@code {
+    record HeroVital(string Label, string Value, string Color);
+    record Feature(string Icon, string Title, string Desc);
+    record RoleItem(string Role, string[] Points);
+
+    HeroVital[] HeroVitals = [
+        new("Blood Pressure", "118/76 mmHg", "dark"),
+        new("Heart Rate",     "72 bpm",      "blue"),
+        new("Blood Oxygen",   "98%",         "green"),
+    ];
+
+    Feature[] Features = [
+        new("📊", "Record Health Data",      "Log vital signs — blood pressure, heart rate, temperature, oxygen, and weight — anytime from any device."),
+        new("🔗", "Shared with Your Doctor", "Your doctor sees your data in real time, enabling better oversight between consultations."),
+        new("💬", "Stay Connected",          "Message your doctor directly and receive timely notifications about your health."),
+    ];
+
+    RoleItem[] Roles = [
+        new("Patients", ["Track vitals daily", "View medication reminders", "Access full health history", "Message your doctor anytime"]),
+        new("Doctors",  ["Monitor all patients centrally", "Review historical health data", "Identify patients needing attention", "Communicate securely"]),
+    ];
+
+    string[] TrustPoints = [
+        "End-to-end encrypted messages",
+        "Role-based access control",
+        "No third-party data sharing",
+        "HIPAA-aligned practices",
+    ];
+}

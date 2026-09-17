@@ -1,0 +1,139 @@
+﻿@page "/signup"
+@inject NavigationManager Nav
+
+<div class="auth-page">
+    <div class="auth-container">
+
+        <!-- Logo -->
+        <div class="auth-logo-area">
+            <div class="auth-logo-row">
+                <div class="auth-logo-icon">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                </div>
+                <span class="auth-logo-text">DocTient</span>
+            </div>
+            <h1 class="auth-heading">Create your account</h1>
+            <p class="auth-subheading">Get started for free — no credit card required</p>
+        </div>
+
+        <!-- Card -->
+        <div class="auth-card">
+
+            <!-- Role tabs -->
+            <div class="role-tabs">
+                <button @onclick='() => Role = "patient"' class="tab-btn @(Role == "patient" ? "active" : "")">
+                    I'm a Patient
+                </button>
+                <button @onclick='() => Role = "doctor"' class="tab-btn @(Role == "doctor" ? "active" : "")">
+                    I'm a Doctor
+                </button>
+            </div>
+
+            @if (!string.IsNullOrEmpty(ErrorMsg))
+            {
+                <div class="error-msg">@ErrorMsg</div>
+            }
+
+            <!-- Name row -->
+            <div class="field-row">
+                <div class="field">
+                    <label>First name</label>
+                    <input @bind="FirstName" type="text" placeholder="Alex" class="form-input" />
+                </div>
+                <div class="field">
+                    <label>Last name</label>
+                    <input @bind="LastName" type="text" placeholder="Reyes" class="form-input" />
+                </div>
+            </div>
+
+            <!-- Email -->
+            <div class="field">
+                <label>Email address</label>
+                <input @bind="Email" type="email" placeholder="you@email.com" class="form-input" />
+            </div>
+
+            @if (Role == "doctor")
+            {
+                <div class="field">
+                    <label>Specialty</label>
+                    <select @bind="Specialty" class="form-select">
+                        <option value="">Select specialty</option>
+                        <option>General Practitioner</option>
+                        <option>Cardiologist</option>
+                        <option>Internist</option>
+                        <option>Pulmonologist</option>
+                        <option>Endocrinologist</option>
+                    </select>
+                </div>
+            }
+
+            <!-- Password -->
+            <div class="field">
+                <label>Password</label>
+                <input @bind="Password" type="password" placeholder="Min. 8 characters" class="form-input" />
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="field-last">
+                <label>Confirm password</label>
+                <input @bind="Confirm" type="password" placeholder="Re-enter password" class="form-input" />
+            </div>
+
+            <!-- Submit -->
+            <button @onclick="HandleSignup" disabled="@Loading" class="btn-submit">
+                @(Loading ? "Creating account..." : "Create Account")
+            </button>
+
+            <p class="auth-fine-print">
+                By signing up you agree to our
+                <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.
+            </p>
+
+            <p class="auth-footer-text">
+                Already have an account? <a href="/login">Sign in</a>
+            </p>
+        </div>
+
+        <div class="auth-back-link">
+            <a href="/">← Back to home</a>
+        </div>
+    </div>
+</div>
+
+@code {
+    string Role = "patient";
+    string FirstName = "";
+    string LastName = "";
+    string Email = "";
+    string Specialty = "";
+    string Password = "";
+    string Confirm = "";
+    string ErrorMsg = "";
+    bool Loading = false;
+
+    async Task HandleSignup()
+    {
+        ErrorMsg = "";
+        if (string.IsNullOrWhiteSpace(FirstName) || string.IsNullOrWhiteSpace(LastName) ||
+            string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
+        {
+            ErrorMsg = "Please fill in all required fields.";
+            return;
+        }
+        if (Password != Confirm)
+        {
+            ErrorMsg = "Passwords do not match.";
+            return;
+        }
+        if (Password.Length < 8)
+        {
+            ErrorMsg = "Password must be at least 8 characters.";
+            return;
+        }
+        Loading = true;
+        await Task.Delay(900);
+        Nav.NavigateTo("/dashboard");
+    }
+}

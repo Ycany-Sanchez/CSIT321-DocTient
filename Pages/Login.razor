@@ -1,0 +1,90 @@
+﻿@page "/login"
+@inject NavigationManager Nav
+
+<div class="auth-page">
+    <div class="auth-container">
+
+        <!-- Logo -->
+        <div class="auth-logo-area">
+            <div class="auth-logo-row">
+                <div class="auth-logo-icon">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                </div>
+                <span class="auth-logo-text">DocTient</span>
+            </div>
+            <h1 class="auth-heading">Welcome back</h1>
+            <p class="auth-subheading">Sign in to your account</p>
+        </div>
+
+        <!-- Card -->
+        <div class="auth-card">
+
+            <!-- Role tabs -->
+            <div class="role-tabs">
+                <button @onclick='() => Role = "patient"' class="tab-btn @(Role == "patient" ? "active" : "")">
+                    Patient
+                </button>
+                <button @onclick='() => Role = "doctor"' class="tab-btn @(Role == "doctor" ? "active" : "")">
+                    Doctor
+                </button>
+            </div>
+
+            @if (!string.IsNullOrEmpty(ErrorMsg))
+            {
+                <div class="error-msg">@ErrorMsg</div>
+            }
+
+            <!-- Email -->
+            <div class="field">
+                <label>Email address</label>
+                <input @bind="Email" type="email" placeholder="you@email.com" class="form-input" />
+            </div>
+
+            <!-- Password -->
+            <div class="field-sm">
+                <label>Password</label>
+                <input @bind="Password" type="password" placeholder="••••••••" class="form-input" />
+            </div>
+
+            <div class="forgot-link-row">
+                <a href="#" class="forgot-link">Forgot password?</a>
+            </div>
+
+            <!-- Submit -->
+            <button @onclick="HandleLogin" disabled="@Loading" class="btn-submit">
+                @(Loading ? "Signing in..." : "Sign In")
+            </button>
+
+            <p class="auth-footer-text">
+                No account? <a href="/signup">Create one</a>
+            </p>
+        </div>
+
+        <div class="auth-back-link">
+            <a href="/">← Back to home</a>
+        </div>
+    </div>
+</div>
+
+@code {
+    string Role = "patient";
+    string Email = "";
+    string Password = "";
+    string ErrorMsg = "";
+    bool Loading = false;
+
+    async Task HandleLogin()
+    {
+        ErrorMsg = "";
+        if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
+        {
+            ErrorMsg = "Please fill in all fields.";
+            return;
+        }
+        Loading = true;
+        await Task.Delay(800);
+        Nav.NavigateTo("/dashboard");
+    }
+}
