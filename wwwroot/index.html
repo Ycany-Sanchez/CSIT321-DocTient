@@ -11,18 +11,33 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        display: ['"DM Sans"', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
     <link rel="stylesheet" href="css/app.css" />
 </head>
 <body>
     <div id="app">
-        <div class="loading-screen">
-            <div class="loading-inner">
-                <div class="spinner"></div>
-                <p class="loading-text">Loading DocTient...</p>
+        <div class="min-h-screen flex items-center justify-center">
+            <div class="flex flex-col items-center gap-4">
+                <div class="w-10 h-10 border-4 border-sky-400 border-t-transparent rounded-full animate-spin"></div>
+                <p class="text-sm font-medium text-white/60">Loading DocTient...</p>
             </div>
         </div>
     </div>
-    <div id="blazor-error-ui" style="display:none;position:fixed;bottom:0;width:100%;background:#fef2f2;color:#991b1b;padding:0.75rem 1.5rem;border-top:1px solid #f87171;z-index:999">
+    <div id="blazor-error-ui" style="display:none;position:fixed;bottom:0;width:100%;background:rgba(239,68,68,0.15);backdrop-filter:blur(12px);color:#fca5a5;padding:0.75rem 1.5rem;border-top:1px solid rgba(239,68,68,0.3);z-index:999">
         An unhandled error has occurred. <a href="" style="font-weight:600;text-decoration:underline">Reload</a>
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
