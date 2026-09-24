@@ -1,4 +1,4 @@
-﻿@page "/dashboard"
+@page "/dashboard"
 @inject NavigationManager Nav
 
 <div class="min-h-screen flex">
@@ -72,7 +72,7 @@
         <main class="flex-1 px-6 py-6 max-w-6xl mx-auto w-full space-y-6">
 
             <!-- Vitals Cards -->
-            <div>
+            <div class="anim-fade-up">
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-sm font-semibold text-white">Today's Vitals</h2>
                     <span class="text-xs text-white/40">Last logged: 7:30 AM today</span>
@@ -80,7 +80,7 @@
                 <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
                     @foreach (var v in Vitals)
                     {
-                        <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 shadow-lg shadow-black/10 hover:bg-white/15 hover:border-white/30 transition-all duration-300">
+                        <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 shadow-lg shadow-black/10 card-lift">
                             <div class="text-xl mb-2">@v.Icon</div>
                             <p class="text-xs text-white/40 mb-1">@v.Label</p>
                             <p class="text-base font-bold text-white leading-tight">@v.Value</p>
@@ -94,7 +94,7 @@
             <!-- Doctor + Quick Actions row -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- Doctor card -->
-                <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-5 shadow-lg shadow-black/10">
+                <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-5 shadow-lg shadow-black/10 card-lift anim-fade-up delay-200">
                     <p class="text-xs font-semibold text-white/40 uppercase tracking-wider mb-4">Your Doctor</p>
                     <div class="flex items-center gap-3 mb-4">
                         <div class="w-12 h-12 bg-sky-500 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0 shadow-lg shadow-sky-500/30">RC</div>
@@ -114,7 +114,7 @@
                 </div>
 
                 <!-- Quick actions -->
-                <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-5 shadow-lg shadow-black/10">
+                <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-5 shadow-lg shadow-black/10 card-lift anim-fade-up delay-300">
                     <p class="text-xs font-semibold text-white/40 uppercase tracking-wider mb-4">Quick Actions</p>
                     <div class="space-y-2">
                         @foreach (var a in QuickActions)
@@ -129,7 +129,7 @@
             </div>
 
             <!-- Trend Chart -->
-            <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-5 shadow-lg shadow-black/10">
+            <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-5 shadow-lg shadow-black/10 card-lift anim-fade-up delay-400">
                 <div class="flex items-center justify-between mb-4">
                     <div>
                         <p class="text-sm font-semibold text-white">Heart Rate — 7-day Trend</p>
@@ -168,7 +168,7 @@
             </div>
 
             <!-- Recent Health Records -->
-            <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-lg shadow-black/10 overflow-hidden">
+            <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-lg shadow-black/10 overflow-hidden card-lift anim-fade-up delay-500">
                 <div class="px-5 py-4 border-b border-white/10 flex items-center justify-between">
                     <p class="text-sm font-semibold text-white">Recent Health Records</p>
                     <span class="text-xs text-white/40">Last 5 entries</span>
@@ -190,7 +190,7 @@
             </div>
 
             <!-- Medication Reminders -->
-            <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-lg shadow-black/10 overflow-hidden">
+            <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-lg shadow-black/10 overflow-hidden card-lift anim-fade-up delay-600">
                 <div class="px-5 py-4 border-b border-white/10">
                     <p class="text-sm font-semibold text-white">Medication Reminders</p>
                 </div>
