@@ -32,7 +32,7 @@
             {
                 <a href="@item.Href"
                    class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all @(item.Active ? "bg-sky-500/20 text-sky-300 border border-sky-500/20 font-semibold" : "text-white/50 hover:bg-white/10 hover:text-white")">
-                    <span class="text-base">@item.Icon</span>
+                    <i class="@item.Icon text-sm w-5 text-center"></i>
                     @item.Label
                 </a>
             }
@@ -41,7 +41,7 @@
         <div class="px-4 py-5 border-t border-white/10 flex-shrink-0">
             <button @onclick='() => Nav.NavigateTo("/login")'
                     class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/40 hover:bg-red-500/10 hover:text-red-400 transition-all">
-                <span class="text-base">🚪</span> Sign Out
+                <i class="fa-solid fa-right-from-bracket text-sm w-5 text-center"></i> Sign Out
             </button>
         </div>
     </aside>
@@ -53,7 +53,7 @@
         <header class="sticky top-0 z-20 glass-strong border-b border-white/10 flex-shrink-0">
             <div class="px-6 h-16 flex items-center justify-between">
                 <div>
-                    <h1 class="text-sm font-semibold text-white">Good morning, Alex 👋</h1>
+                    <h1 class="text-sm font-semibold text-white">Good morning, Alex</h1>
                     <p class="text-xs text-white/40">@DateTime.Now.ToString("dddd, MMMM d, yyyy")</p>
                 </div>
                 <div class="flex items-center gap-2">
@@ -95,8 +95,8 @@
                         <div class="absolute -left-16 -bottom-20 w-72 h-72 rounded-full bg-sky-500/15 blur-3xl pointer-events-none"></div>
                         <div class="flex flex-col sm:flex-row gap-6 relative">
                             <div class="flex-1 min-w-0">
-                                <p class="text-xs font-semibold text-white/40 uppercase tracking-wider mb-2">💓 Heart Rate</p>
-                                <p class="text-6xl font-bold text-white tracking-tight leading-none" style="font-family:'DM Sans',sans-serif">@Vitals[1].Value <span class="text-lg font-medium text-white/40">bpm</span></p>
+                                <p class="text-xs font-semibold text-rose-200/80 uppercase tracking-wider mb-2">Heart Rate</p>
+                                <p class="text-6xl font-bold text-white tracking-tight leading-none" style="font-family:'DM Sans',sans-serif">@Vitals[1].Value <span class="text-lg font-medium text-rose-300">bpm</span></p>
                                 <span class="inline-block mt-3 px-2.5 py-1 rounded-full text-[11px] font-medium @Vitals[1].BadgeClass">@Vitals[1].Status · Resting</span>
                                 <svg viewBox="0 0 300 60" class="w-full h-14 mt-4" preserveAspectRatio="none" aria-hidden="true">
                                     <defs>
@@ -123,8 +123,8 @@
                                     <path fill="url(#heartGrad)" d="M12 21s-7.5-4.7-10-9.3C.4 8.6 2 4.9 5.5 4.1c2-.5 4.2.1 6.5 2.7 2.3-2.6 4.5-3.2 6.5-2.7 3.5.8 5.1 4.5 3.5 7.6C19.5 16.3 12 21 12 21z" />
                                     <path fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="0.7" stroke-linecap="round" d="M4 12h3l1.5-3 2 6 1.5-4.5 1 1.5h3" />
                                 </svg>
-                                <span class="absolute top-1 -right-1 px-2.5 py-1 rounded-full text-[10px] font-semibold glass-inset text-white/70 anim-badge">🩸 @Vitals[0].Value</span>
-                                <span class="absolute bottom-1 -left-1 px-2.5 py-1 rounded-full text-[10px] font-semibold glass-inset text-white/70 anim-badge" style="animation-delay:-3s">🫁 @Vitals[3].Value%</span>
+                                <span class="absolute top-1 -right-1 px-2.5 py-1 rounded-full text-[10px] font-semibold glass-inset text-sky-200 anim-badge">@Vitals[0].Value</span>
+                                <span class="absolute bottom-1 -left-1 px-2.5 py-1 rounded-full text-[10px] font-semibold glass-inset text-emerald-200 anim-badge" style="animation-delay:-3s">@Vitals[3].Value%</span>
                             </div>
                         </div>
                     </div>
@@ -133,10 +133,10 @@
                         <div class="glass rounded-2xl p-5 card-lift relative overflow-hidden">
                             <div class="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-sky-500/20 blur-3xl pointer-events-none"></div>
                             <div class="flex items-center justify-between mb-2 relative">
-                                <p class="text-xs text-white/40">🩸 @Vitals[0].Label</p>
+                                <p class="text-xs font-medium text-sky-200/80">@Vitals[0].Label</p>
                                 <span class="px-2 py-0.5 rounded-full text-[10px] font-medium @Vitals[0].BadgeClass">@Vitals[0].Status</span>
                             </div>
-                            <p class="text-2xl font-bold text-white relative" style="font-family:'DM Sans',sans-serif">@Vitals[0].Value <span class="text-xs font-medium text-white/40">@Vitals[0].Unit</span></p>
+                            <p class="text-2xl font-bold text-sky-100 relative" style="font-family:'DM Sans',sans-serif">@Vitals[0].Value <span class="text-xs font-medium text-sky-300/70">@Vitals[0].Unit</span></p>
                             <div class="mt-3 space-y-2 relative">
                                 <div>
                                     <div class="flex justify-between text-[10px] text-white/40 mb-1"><span>SYS 118</span><span>DIA 76</span></div>
@@ -150,11 +150,11 @@
                         <div class="glass rounded-2xl p-5 card-lift relative overflow-hidden">
                             <div class="absolute -right-10 -bottom-10 w-40 h-40 rounded-full bg-amber-500/20 blur-3xl pointer-events-none"></div>
                             <div class="flex items-center justify-between mb-2 relative">
-                                <p class="text-xs text-white/40">🌡️ @Vitals[2].Label</p>
+                                <p class="text-xs font-medium text-amber-200/80">@Vitals[2].Label</p>
                                 <span class="px-2 py-0.5 rounded-full text-[10px] font-medium @Vitals[2].BadgeClass">@Vitals[2].Status</span>
                             </div>
                             <div class="flex items-end gap-3 relative">
-                                <p class="text-2xl font-bold text-white" style="font-family:'DM Sans',sans-serif">@Vitals[2].Value <span class="text-xs font-medium text-white/40">@Vitals[2].Unit</span></p>
+                                <p class="text-2xl font-bold text-amber-100" style="font-family:'DM Sans',sans-serif">@Vitals[2].Value <span class="text-xs font-medium text-amber-300/70">@Vitals[2].Unit</span></p>
                                 <div class="flex-1 h-2 rounded-full glass-inset overflow-hidden mb-1.5">
                                     <div class="h-full rounded-full bg-gradient-to-r from-sky-400 via-amber-400 to-rose-400" style="width:42%"></div>
                                 </div>
@@ -174,18 +174,18 @@
                             <span class="absolute inset-0 flex items-center justify-center text-sm font-bold text-white">@Vitals[3].Value%</span>
                         </div>
                         <div>
-                            <p class="text-xs text-white/40">🫁 @Vitals[3].Label</p>
-                            <p class="text-lg font-bold text-white">@Vitals[3].Value <span class="text-xs font-medium text-white/40">@Vitals[3].Unit</span></p>
+                            <p class="text-xs font-medium text-emerald-200/80">@Vitals[3].Label</p>
+                            <p class="text-lg font-bold text-emerald-100">@Vitals[3].Value <span class="text-xs font-medium text-emerald-300/70">@Vitals[3].Unit</span></p>
                             <span class="inline-block mt-1 px-2 py-0.5 rounded-full text-[10px] font-medium @Vitals[3].BadgeClass">@Vitals[3].Status</span>
                         </div>
                     </div>
                     <div class="glass rounded-2xl p-5 card-lift relative overflow-hidden">
                         <div class="absolute -right-12 -top-12 w-44 h-44 rounded-full bg-violet-500/20 blur-3xl pointer-events-none"></div>
                         <div class="flex items-center justify-between mb-1 relative">
-                            <p class="text-xs text-white/40">⚖️ @Vitals[4].Label</p>
+                            <p class="text-xs font-medium text-violet-200/80">@Vitals[4].Label</p>
                             <span class="px-2 py-0.5 rounded-full text-[10px] font-medium @Vitals[4].BadgeClass">@Vitals[4].Status</span>
                         </div>
-                        <p class="text-lg font-bold text-white relative">@Vitals[4].Value <span class="text-xs font-medium text-white/40">@Vitals[4].Unit</span></p>
+                        <p class="text-lg font-bold text-violet-100 relative">@Vitals[4].Value <span class="text-xs font-medium text-violet-300/70">@Vitals[4].Unit</span></p>
                         <svg viewBox="0 0 200 44" class="w-full h-11 mt-2 relative" preserveAspectRatio="none" aria-hidden="true">
                             <polyline points="0,32 30,28 60,30 90,22 120,24 150,16 180,18 200,12" fill="none" stroke="#a78bfa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
                             <circle cx="200" cy="12" r="3.5" fill="#a78bfa" />
@@ -195,41 +195,26 @@
                 </div>
             </div>
 
-            <!-- Doctor + Quick Actions row -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Doctor row -->
+            <div class="grid grid-cols-1 gap-4">
                 <!-- Doctor card -->
                 <div class="glass rounded-2xl p-5 card-lift anim-fade-up delay-200">
-                    <p class="text-xs font-semibold text-white/40 uppercase tracking-wider mb-4">Your Doctor</p>
+                    <p class="text-xs font-semibold text-sky-200/70 uppercase tracking-wider mb-4">Your Doctor</p>
                     <div class="flex items-center gap-3 mb-4">
                         <div class="w-12 h-12 bg-sky-500 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0 shadow-lg shadow-sky-500/30">RC</div>
                         <div class="flex-1 min-w-0">
                             <p class="text-sm font-semibold text-white">Dr. Rafael Cruz</p>
-                            <p class="text-xs text-white/50">General Practitioner · Makati Med</p>
+                            <p class="text-xs text-sky-200/60">General Practitioner · Makati Med</p>
                             <div class="flex items-center gap-1.5 mt-1">
                                 <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
-                                <span class="text-xs text-emerald-400 font-medium">Online</span>
+                                <span class="text-xs text-emerald-300 font-medium">Online</span>
                             </div>
                         </div>
                     </div>
-                    <p class="text-sm text-white/60 glass-inset rounded-xl px-4 py-3 italic leading-relaxed">
+                    <p class="text-sm text-slate-200/80 glass-inset rounded-xl px-4 py-3 italic leading-relaxed">
                         "Your blood pressure looks good this week — keep logging daily!"
                     </p>
                     <p class="text-xs text-white/30 mt-2 text-right">Today, 9:12 AM</p>
-                </div>
-
-                <!-- Quick actions -->
-                <div class="glass rounded-2xl p-5 card-lift anim-fade-up delay-300">
-                    <p class="text-xs font-semibold text-white/40 uppercase tracking-wider mb-4">Quick Actions</p>
-                    <div class="space-y-2">
-                        @foreach (var a in QuickActions)
-                        {
-                            <button @onclick="() => HandleQuickAction(a)"
-                                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl glass-inset hover:bg-sky-500/10 hover:text-sky-300 hover:border-sky-500/20 text-white/60 text-sm font-medium transition-all text-left">
-                                <span class="text-lg">@a.Icon</span>
-                                @a.Label
-                            </button>
-                        }
-                    </div>
                 </div>
             </div>
 
@@ -272,28 +257,6 @@
                 </div>
             </div>
 
-            <!-- Recent Health Records -->
-            <div class="glass rounded-2xl overflow-hidden card-lift anim-fade-up delay-500">
-                <div class="px-5 py-4 border-b border-white/10 flex items-center justify-between">
-                    <p class="text-sm font-semibold text-white">Recent Health Records</p>
-                    <span class="text-xs text-white/40">Last 5 entries</span>
-                </div>
-                @foreach (var r in Records)
-                {
-                    <div class="px-5 py-3.5 flex items-center gap-4 hover:bg-white/5 transition border-b border-white/5 last:border-0">
-                        <div class="text-white/20 text-sm w-5 shrink-0">📋</div>
-                        <div class="flex-1 min-w-0">
-                            <p class="text-sm font-medium text-white">@r.Type</p>
-                            <p class="text-xs text-white/40">@r.Date</p>
-                        </div>
-                        <div class="text-right shrink-0">
-                            <p class="text-sm font-semibold text-white">@r.Value</p>
-                            <span class="px-2 py-0.5 rounded-full text-[10px] font-medium @r.BadgeClass">@r.Status</span>
-                        </div>
-                    </div>
-                }
-            </div>
-
             <!-- Medication Reminders -->
             <div class="glass rounded-2xl overflow-hidden card-lift anim-fade-up delay-600">
                 <div class="px-5 py-4 border-b border-white/10">
@@ -333,52 +296,22 @@
 
     record SidebarItem(string Icon, string Label, string Href, bool Active);
     SidebarItem[] SidebarItems = [
-        new("🏠", "Dashboard",      "/dashboard", true),
-        new("❤️",  "My Health",     "#",          false),
-        new("📋", "Health History", "#",          false),
-        new("💊", "Medications",    "#",          false),
-        new("⭐", "Rate Doctor",    "/feedback",  false),
-        new("💬", "Messages",       "#",          false),
-        new("👤", "Profile",        "#",          false),
+        new("fa-solid fa-house", "Dashboard",      "/dashboard", true),
+        new("fa-solid fa-heart-pulse",  "My Health",     "#",          false),
+        new("fa-solid fa-clipboard-list", "Health History", "#",          false),
+        new("fa-solid fa-pills",    "Medications",    "#",          false),
+        new("fa-solid fa-star", "Rate Doctor",    "/feedback",  false),
+        new("fa-solid fa-comments",       "Messages",       "#",          false),
+        new("fa-solid fa-user",         "Profile",        "#",          false),
     ];
 
-    record VitalCard(string Icon, string Label, string Value, string Unit, string Status, string BadgeClass);
+    record VitalCard(string Label, string Value, string Unit, string Status, string BadgeClass);
     VitalCard[] Vitals = [
-        new("❤️",  "Blood Pressure", "118/76", "mmHg", "Normal",  "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"),
-        new("💓", "Heart Rate",     "72",     "bpm",  "Normal",  "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"),
-        new("🌡️", "Temperature",    "36.5",   "°C",   "Normal",  "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"),
-        new("🫁", "Blood Oxygen",   "98",     "%",    "Normal",  "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"),
-        new("⚖️",  "Weight",         "68.2",   "kg",   "Monitor", "bg-amber-500/20 text-amber-300 border border-amber-500/30"),
-    ];
-
-    record QuickAction(string Icon, string Label, string Href);
-    QuickAction[] QuickActions = [
-        new("➕", "Log Vitals", "#"),
-        new("💬", "Message Dr. Cruz", "#"),
-        new("📅", "Request Appointment", "#"),
-        new("⭐", "Rate Your Visit", "/feedback"),
-    ];
-
-    void HandleQuickAction(QuickAction action)
-    {
-        if (action.Href != "#")
-            Nav.NavigateTo(action.Href);
-    }
-
-    class HealthRecord
-    {
-        public string Type = "";
-        public string Date = "";
-        public string Value = "";
-        public string Status = "";
-        public string BadgeClass = "";
-    }
-    HealthRecord[] Records = [
-        new() { Type = "Blood Pressure", Date = "Sep 17 · 7:30 AM", Value = "118/76 mmHg", Status = "Normal",  BadgeClass = "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30" },
-        new() { Type = "Heart Rate",     Date = "Sep 16 · 8:15 AM", Value = "75 bpm",      Status = "Normal",  BadgeClass = "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30" },
-        new() { Type = "Blood Oxygen",   Date = "Sep 15 · 7:45 AM", Value = "97%",         Status = "Normal",  BadgeClass = "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30" },
-        new() { Type = "Temperature",    Date = "Sep 14 · 9:00 AM", Value = "37.1 °C",     Status = "Monitor", BadgeClass = "bg-amber-500/20 text-amber-300 border border-amber-500/30" },
-        new() { Type = "Weight",         Date = "Sep 13 · 8:00 AM", Value = "68.0 kg",     Status = "Monitor", BadgeClass = "bg-amber-500/20 text-amber-300 border border-amber-500/30" },
+        new("Blood Pressure", "118/76", "mmHg", "Normal",  "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"),
+        new("Heart Rate",     "72",     "bpm",  "Normal",  "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"),
+        new("Temperature",    "36.5",   "°C",   "Normal",  "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"),
+        new("Blood Oxygen",   "98",     "%",    "Normal",  "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"),
+        new("Weight",         "68.2",   "kg",   "Monitor", "bg-amber-500/20 text-amber-300 border border-amber-500/30"),
     ];
 
     class Medication
