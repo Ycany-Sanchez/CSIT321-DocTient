@@ -135,6 +135,20 @@ body::before {
     0%, 100% { transform: translateY(0px) rotate(-1deg); }
     50%       { transform: translateY(-6px) rotate(1deg); }
 }
+@keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    14%      { transform: scale(1.12); }
+    28%      { transform: scale(1); }
+    42%      { transform: scale(1.12); }
+    56%      { transform: scale(1); }
+}
+@keyframes ecgFlow {
+    to { stroke-dashoffset: -240; }
+}
+@keyframes drift {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    50%      { transform: translate(22px,-16px) scale(1.06); }
+}
 
 /* Animation utility classes */
 .anim-fade-up    { animation: fadeInUp    0.7s cubic-bezier(.22,1,.36,1) both; }
@@ -144,6 +158,9 @@ body::before {
 .anim-float      { animation: floatY      5s ease-in-out infinite; }
 .anim-glow       { animation: glowPulse   4s ease-in-out infinite; }
 .anim-badge      { animation: badgeFloat  6s ease-in-out infinite; }
+.heart-beat      { animation: heartBeat   1.8s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+.ecg-flow        { stroke-dasharray: 60 180; animation: ecgFlow 3s linear infinite; }
+.dash-blob       { position: absolute; border-radius: 9999px; filter: blur(70px); pointer-events: none; animation: drift 12s ease-in-out infinite; }
 
 /* Stagger delays */
 .delay-100 { animation-delay: 100ms; }
