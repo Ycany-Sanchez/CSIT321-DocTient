@@ -4,7 +4,7 @@
 <div class="min-h-screen flex">
 
     <!-- Sidebar -->
-    <aside class="hidden md:flex flex-col w-64 bg-white/10 backdrop-blur-xl border-r border-white/10 fixed inset-y-0 left-0 z-30">
+    <aside class="hidden md:flex flex-col w-64 glass-strong border-r border-white/10 fixed inset-y-0 left-0 z-30">
         <div class="px-6 h-16 flex items-center border-b border-white/10 flex-shrink-0">
             <a href="/" class="flex items-center gap-2.5">
                 <div class="w-8 h-8 bg-sky-500 rounded-lg flex items-center justify-center shadow-lg shadow-sky-500/40">
@@ -24,14 +24,25 @@
                 </div>
             </div>
         </div>
-        <nav class="flex-1 px-4 py-4 space-y-0.5 overflow-y-auto">
+        <nav class="flex-1 px-4 py-4 space-y-0.5 overflow-y-auto" aria-label="Primary">
             @foreach (var item in SidebarItems)
             {
-                <a href="@item.Href"
-                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all @(item.Active ? "bg-sky-500/20 text-sky-300 border border-sky-500/20 font-semibold" : "text-white/50 hover:bg-white/10 hover:text-white")">
-                    <span class="text-base">@item.Icon</span>
-                    @item.Label
-                </a>
+                if (item.Href == "#")
+                {
+                    <span title="Coming soon"
+                          class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/30 cursor-not-allowed select-none">
+                        <span class="text-base opacity-60">@item.Icon</span>
+                        @item.Label
+                    </span>
+                }
+                else
+                {
+                    <a href="@item.Href" aria-current="@(item.Active ? "page" : null)"
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-200 @(item.Active ? "bg-sky-500/20 text-sky-300 border border-sky-500/20 font-semibold" : "text-white/50 hover:bg-white/10 hover:text-white border border-transparent")">
+                        <span class="text-base">@item.Icon</span>
+                        @item.Label
+                    </a>
+                }
             }
         </nav>
         <div class="px-4 py-5 border-t border-white/10 flex-shrink-0">
@@ -45,14 +56,14 @@
     <!-- Main -->
     <div class="flex-1 md:ml-64 flex flex-col min-h-screen">
 
-        <header class="sticky top-0 z-20 bg-white/5 backdrop-blur-xl border-b border-white/10 flex-shrink-0">
+        <header class="sticky top-0 z-20 glass-strong border-b border-white/10 flex-shrink-0">
             <div class="px-6 h-16 flex items-center justify-between">
                 <div>
                     <h1 class="text-sm font-semibold text-white">Rate your visit ⭐</h1>
                     <p class="text-xs text-white/40">@DateTime.Now.ToString("dddd, MMMM d, yyyy")</p>
                 </div>
                 <button @onclick='() => Nav.NavigateTo("/dashboard")'
-                        class="px-3.5 py-2 text-xs font-medium text-white bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl transition">
+                        class="px-3.5 py-2 text-xs font-medium text-white glass-inset hover:bg-white/10 rounded-xl transition">
                     ← Dashboard
                 </button>
             </div>
@@ -61,14 +72,14 @@
         <main class="flex-1 px-6 py-6 max-w-6xl mx-auto w-full space-y-6">
 
             <div class="anim-fade-up">
-                <h2 class="text-xl font-bold text-white" style="font-family:'DM Sans',sans-serif">How was your consultation?</h2>
-                <p class="text-sm text-white/50 mt-1">Your rating helps Dr. Cruz and other patients. It only takes a few seconds.</p>
+                <h2 class="text-xl font-bold text-white tracking-tight text-balance" style="font-family:'DM Sans',sans-serif">How was your consultation?</h2>
+                <p class="text-sm text-white/50 mt-1 max-w-xl leading-relaxed">Your rating helps Dr. Cruz and other patients. It only takes a few seconds.</p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
 
-                <!-- Rating form -->
-                <div class="lg:col-span-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 shadow-lg shadow-black/10 card-lift anim-fade-up delay-200">
+                <!-- Rating form : true glass — inner edge refraction + tinted shadow -->
+                <div class="lg:col-span-3 glass ring-1 ring-inset ring-white/10 rounded-2xl p-6 card-lift anim-fade-up delay-200">
                     <div class="flex items-center gap-3 mb-4 pb-5 border-b border-white/10">
                         <div class="w-12 h-12 bg-sky-500 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0 shadow-lg shadow-sky-500/30">RC</div>
                         <div class="flex-1 min-w-0">
@@ -83,7 +94,7 @@
                     <div class="mb-5">
                         <label class="block text-sm font-semibold text-white mb-1.5">Which visit are you rating? <span class="text-red-400">*</span></label>
                         <select @bind="SelectedVisit"
-                                class="w-full px-3.5 py-2.5 text-sm border border-white/20 rounded-xl bg-white/10 backdrop-blur-sm text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-400/50 transition">
+                                class="w-full px-3.5 py-2.5 text-sm rounded-xl glass-input text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-400/50 transition">
                             @foreach (var v in Visits)
                             {
                                 <option value="@v" class="bg-slate-800 text-white">@v</option>
@@ -114,8 +125,9 @@
                             var filled = star <= (HoverRating > 0 ? HoverRating : SelectedRating);
                             <button @onclick="() => SetRating(star)"
                                     @onmouseenter="() => HoverRating = star"
-                                    class="text-3xl leading-none transition-transform hover:scale-110 focus:outline-none @(filled ? "text-amber-400" : "text-white/20 hover:text-white/40")"
-                                    title="@star star">
+                                    class="text-3xl leading-none transition-transform duration-200 hover:scale-110 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60 rounded @(filled ? "text-amber-400" : "text-white/20 hover:text-white/40")"
+                                    title="@star star"
+                                    aria-label="Rate @star star">
                                 ★
                             </button>
                         }
@@ -139,19 +151,19 @@
 
                     <div class="flex items-center justify-between mb-1.5">
                         <label class="text-sm font-semibold text-white">Your comment <span class="text-red-400">*</span></label>
-                        <span class="text-xs @(Comment.Length > MaxComment ? "text-red-400" : "text-white/30")">@Comment.Length / @MaxComment</span>
+                        <span class="text-xs tabular-nums @(Comment.Length > MaxComment ? "text-red-400" : "text-white/30")">@(Comment?.Length ?? 0) / @MaxComment</span>
                     </div>
                     <textarea @bind="Comment" @bind:event="oninput" rows="4" maxlength="@MaxComment"
                               placeholder="e.g. Doctor explained everything clearly and the follow-up was quick..."
-                              class="w-full px-3.5 py-3 text-sm border border-white/20 rounded-xl bg-white/10 backdrop-blur-sm text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-400/50 transition resize-none"></textarea>
+                              class="w-full px-3.5 py-3 text-sm rounded-xl glass-input text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-400/50 transition resize-none leading-relaxed"></textarea>
 
                     <div class="flex items-center gap-3 mt-5">
                         <button @onclick="HandleSubmit" disabled="@Loading"
-                                class="flex-1 py-2.5 text-sm font-semibold text-white bg-sky-500 hover:bg-sky-400 rounded-xl transition shadow-lg shadow-sky-500/30 disabled:opacity-50 disabled:cursor-not-allowed">
+                                class="flex-1 py-2.5 text-sm font-semibold text-white bg-sky-500 hover:bg-sky-400 active:scale-[0.98] rounded-xl transition duration-200 shadow-lg shadow-sky-500/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/70 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100">
                             @(Loading ? "Posting..." : "Post Review")
                         </button>
                         <button @onclick="ResetForm"
-                                class="px-4 py-2.5 text-sm font-medium text-white/60 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition">
+                                class="px-4 py-2.5 text-sm font-medium text-white/60 bg-white/5 hover:bg-white/10 active:scale-[0.98] border border-white/10 rounded-xl transition duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30">
                             Clear
                         </button>
                     </div>
@@ -159,9 +171,9 @@
 
                 <!-- Summary -->
                 <div class="lg:col-span-2 space-y-4">
-                    <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 shadow-lg shadow-black/10 card-lift anim-fade-up delay-300 text-center">
+                    <div class="glass ring-1 ring-inset ring-white/10 rounded-2xl p-6 card-lift anim-fade-up delay-300 text-center">
                         <p class="text-xs font-semibold text-white/40 uppercase tracking-wider mb-2">Average Rating</p>
-                        <p class="text-5xl font-bold text-white" style="font-family:'DM Sans',sans-serif">@AverageRating.ToString("0.0")</p>
+                        <p class="text-5xl font-bold text-white tabular-nums tracking-tight" style="font-family:'DM Sans',sans-serif">@AverageRating.ToString("0.0")</p>
                         <div class="flex items-center justify-center gap-0.5 my-3 text-2xl">
                             @for (int i = 1; i <= 5; i++)
                             {
@@ -185,7 +197,7 @@
                         </div>
                     </div>
 
-                    <div class="bg-sky-500/10 backdrop-blur-md border border-sky-500/20 rounded-2xl p-5 anim-fade-up delay-400">
+                    <div class="bg-sky-500/10 backdrop-blur-[6px] backdrop-saturate-150 border border-sky-500/20 rounded-2xl p-5 anim-fade-up delay-400">
                         <p class="text-sm font-semibold text-sky-300 mb-1">💡 Be kind & specific</p>
                         <p class="text-xs text-white/50 leading-relaxed">Mention what helped — clear explanations, short waits, caring follow-up. Avoid sharing sensitive medical details publicly.</p>
                     </div>
@@ -193,7 +205,7 @@
             </div>
 
             <!-- Reviews list -->
-            <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-lg shadow-black/10 overflow-hidden card-lift anim-fade-up delay-500">
+            <div class="glass rounded-2xl overflow-hidden card-lift anim-fade-up delay-500">
                 <div class="px-5 py-4 border-b border-white/10 flex items-center justify-between">
                     <p class="text-sm font-semibold text-white">Patient Reviews (@Reviews.Count)</p>
                     <span class="text-xs text-white/40">Newest first · front-end only</span>
@@ -328,6 +340,7 @@
         HoverRating = 0;
         Comment = "";
         SelectedTags.Clear();
+        SelectedVisit = Visits[0];
         ErrorMsg = "";
         SuccessMsg = "";
     }
@@ -336,6 +349,11 @@
     {
         ErrorMsg = "";
         SuccessMsg = "";
+        if (string.IsNullOrWhiteSpace(SelectedVisit))
+        {
+            ErrorMsg = "Please choose which visit you are rating.";
+            return;
+        }
         if (SelectedRating == 0)
         {
             ErrorMsg = "Please select a star rating before posting.";
@@ -371,6 +389,7 @@
         HoverRating = 0;
         Comment = "";
         SelectedTags.Clear();
+        SelectedVisit = Visits[0];
     }
 
     void DeleteReview(Review review)

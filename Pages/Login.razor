@@ -19,10 +19,10 @@
         </div>
 
         <!-- Card -->
-        <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl shadow-black/40 p-7 card-lift anim-fade-up delay-100">
+        <div class="glass rounded-2xl p-7 card-lift anim-fade-up delay-100">
 
             <!-- Role tabs -->
-            <div class="flex bg-white/10 rounded-xl p-1 mb-6 border border-white/10">
+            <div class="flex glass-inset rounded-xl p-1 mb-6">
                 <button @onclick='() => Role = "patient"'
                         class="flex-1 py-2 text-sm font-medium rounded-lg transition @(Role == "patient" ? "bg-white/20 text-white shadow-sm" : "text-white/40 hover:text-white/70")">
                     Patient
@@ -44,14 +44,14 @@
             <div class="mb-4">
                 <label class="block text-sm font-medium text-white/70 mb-1.5">Email address</label>
                 <input @bind="Email" type="email" placeholder="you@email.com"
-                       class="w-full px-3.5 py-2.5 text-sm border border-white/20 rounded-xl bg-white/10 backdrop-blur-sm text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-400/50 transition" />
+                       class="w-full px-3.5 py-2.5 text-sm glass-input rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-400/50 transition" />
             </div>
 
             <!-- Password -->
             <div class="mb-2">
                 <label class="block text-sm font-medium text-white/70 mb-1.5">Password</label>
                 <input @bind="Password" type="password" placeholder="••••••••"
-                       class="w-full px-3.5 py-2.5 text-sm border border-white/20 rounded-xl bg-white/10 backdrop-blur-sm text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-400/50 transition" />
+                       class="w-full px-3.5 py-2.5 text-sm glass-input rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-400/50 transition" />
             </div>
 
             <div class="flex justify-end mb-6">

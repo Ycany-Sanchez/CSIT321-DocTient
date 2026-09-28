@@ -4,7 +4,7 @@
 <div class="min-h-screen flex">
 
     <!-- Sidebar -->
-    <aside class="hidden md:flex flex-col w-64 bg-white/10 backdrop-blur-xl border-r border-white/10 fixed inset-y-0 left-0 z-30">
+    <aside class="hidden md:flex flex-col w-64 glass-strong border-r border-white/10 fixed inset-y-0 left-0 z-30">
         <!-- Logo -->
         <div class="px-6 h-16 flex items-center border-b border-white/10 flex-shrink-0">
             <a href="/" class="flex items-center gap-2.5">
@@ -50,7 +50,7 @@
     <div class="flex-1 md:ml-64 flex flex-col min-h-screen">
 
         <!-- Top bar -->
-        <header class="sticky top-0 z-20 bg-white/5 backdrop-blur-xl border-b border-white/10 flex-shrink-0">
+        <header class="sticky top-0 z-20 glass-strong border-b border-white/10 flex-shrink-0">
             <div class="px-6 h-16 flex items-center justify-between">
                 <div>
                     <h1 class="text-sm font-semibold text-white">Good morning, Alex 👋</h1>
@@ -80,7 +80,7 @@
                 <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
                     @foreach (var v in Vitals)
                     {
-                        <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 shadow-lg shadow-black/10 card-lift">
+                        <div class="glass rounded-2xl p-4 card-lift">
                             <div class="text-xl mb-2">@v.Icon</div>
                             <p class="text-xs text-white/40 mb-1">@v.Label</p>
                             <p class="text-base font-bold text-white leading-tight">@v.Value</p>
@@ -94,7 +94,7 @@
             <!-- Doctor + Quick Actions row -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- Doctor card -->
-                <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-5 shadow-lg shadow-black/10 card-lift anim-fade-up delay-200">
+                <div class="glass rounded-2xl p-5 card-lift anim-fade-up delay-200">
                     <p class="text-xs font-semibold text-white/40 uppercase tracking-wider mb-4">Your Doctor</p>
                     <div class="flex items-center gap-3 mb-4">
                         <div class="w-12 h-12 bg-sky-500 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0 shadow-lg shadow-sky-500/30">RC</div>
@@ -107,20 +107,20 @@
                             </div>
                         </div>
                     </div>
-                    <p class="text-sm text-white/60 bg-white/5 border border-white/10 rounded-xl px-4 py-3 italic leading-relaxed">
+                    <p class="text-sm text-white/60 glass-inset rounded-xl px-4 py-3 italic leading-relaxed">
                         "Your blood pressure looks good this week — keep logging daily!"
                     </p>
                     <p class="text-xs text-white/30 mt-2 text-right">Today, 9:12 AM</p>
                 </div>
 
                 <!-- Quick actions -->
-                <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-5 shadow-lg shadow-black/10 card-lift anim-fade-up delay-300">
+                <div class="glass rounded-2xl p-5 card-lift anim-fade-up delay-300">
                     <p class="text-xs font-semibold text-white/40 uppercase tracking-wider mb-4">Quick Actions</p>
                     <div class="space-y-2">
                         @foreach (var a in QuickActions)
                         {
                             <button @onclick="() => HandleQuickAction(a)"
-                                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 hover:bg-sky-500/10 hover:text-sky-300 border border-white/10 hover:border-sky-500/20 text-white/60 text-sm font-medium transition-all text-left">
+                                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl glass-inset hover:bg-sky-500/10 hover:text-sky-300 hover:border-sky-500/20 text-white/60 text-sm font-medium transition-all text-left">
                                 <span class="text-lg">@a.Icon</span>
                                 @a.Label
                             </button>
@@ -130,7 +130,7 @@
             </div>
 
             <!-- Trend Chart -->
-            <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-5 shadow-lg shadow-black/10 card-lift anim-fade-up delay-400">
+            <div class="glass rounded-2xl p-5 card-lift anim-fade-up delay-400">
                 <div class="flex items-center justify-between mb-4">
                     <div>
                         <p class="text-sm font-semibold text-white">Heart Rate — 7-day Trend</p>
@@ -169,7 +169,7 @@
             </div>
 
             <!-- Recent Health Records -->
-            <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-lg shadow-black/10 overflow-hidden card-lift anim-fade-up delay-500">
+            <div class="glass rounded-2xl overflow-hidden card-lift anim-fade-up delay-500">
                 <div class="px-5 py-4 border-b border-white/10 flex items-center justify-between">
                     <p class="text-sm font-semibold text-white">Recent Health Records</p>
                     <span class="text-xs text-white/40">Last 5 entries</span>
@@ -191,15 +191,15 @@
             </div>
 
             <!-- Medication Reminders -->
-            <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-lg shadow-black/10 overflow-hidden card-lift anim-fade-up delay-600">
+            <div class="glass rounded-2xl overflow-hidden card-lift anim-fade-up delay-600">
                 <div class="px-5 py-4 border-b border-white/10">
                     <p class="text-sm font-semibold text-white">Medication Reminders</p>
                 </div>
                 <div class="p-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
                     @foreach (var m in Meds)
                     {
-                        <div class="flex items-center gap-3 p-3.5 rounded-xl border @(m.Taken ? "border-emerald-500/20 bg-emerald-500/10" : "border-white/10 bg-white/5")">
-                            <div class="w-9 h-9 rounded-xl flex items-center justify-center text-lg flex-shrink-0 @(m.Taken ? "bg-emerald-500/20" : "bg-white/10 border border-white/10")">💊</div>
+                        <div class="flex items-center gap-3 p-3.5 rounded-xl @(m.Taken ? "border border-emerald-500/20 bg-emerald-500/10" : "glass-inset")">
+                            <div class="w-9 h-9 rounded-xl flex items-center justify-center text-lg flex-shrink-0 @(m.Taken ? "bg-emerald-500/20" : "glass-inset")">💊</div>
                             <div class="flex-1 min-w-0">
                                 <p class="text-sm font-semibold text-white">@m.Name</p>
                                 <p class="text-xs text-white/50">@m.Dose · @m.Time</p>
