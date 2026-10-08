@@ -4,15 +4,11 @@ public class VitalSign
 {
     public string Id { get; set; } = Guid.NewGuid().ToString("N");
     public string PatientId { get; set; } = string.Empty;
-    public VitalType Type { get; set; }
+    public string Label { get; set; } = string.Empty;
     public string Value { get; set; } = string.Empty;
     public string Unit { get; set; } = string.Empty;
-    public double? NumericValue { get; set; }
-    public int? Systolic { get; set; }
-    public int? Diastolic { get; set; }
     public VitalStatus Status { get; set; } = VitalStatus.Normal;
     public DateTime RecordedAt { get; set; } = DateTime.UtcNow;
-    public string? Notes { get; set; }
 
     public string BadgeClass => Status switch
     {
@@ -22,14 +18,13 @@ public class VitalSign
         _ => "bg-white/10 text-white/70 border border-white/20"
     };
 
-    public string Icon => Type switch
+    public string Icon => Label switch
     {
-        VitalType.BloodPressure => "❤️",
-        VitalType.HeartRate => "💓",
-        VitalType.Temperature => "🌡️",
-        VitalType.BloodOxygen => "🫁",
-        VitalType.Weight => "⚖️",
-        VitalType.BloodGlucose => "🩸",
+        "Blood Pressure" => "❤️",
+        "Heart Rate" => "💓",
+        "Temperature" => "🌡️",
+        "Blood Oxygen" => "🫁",
+        "Weight" => "⚖️",
         _ => "📊"
     };
 }
