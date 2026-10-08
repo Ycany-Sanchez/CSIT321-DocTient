@@ -1,4 +1,4 @@
-﻿# DocTient — Connected Healthcare Management Platform
+# DocTient — Connected Healthcare Management Platform
 
 [![.NET 8.0](https://img.shields.io/badge/.NET-8.0-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
 [![Blazor WebAssembly](https://img.shields.io/badge/Blazor-WebAssembly-512BD4?logo=blazor&logoColor=white)](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor)
@@ -212,109 +212,16 @@ Medical dashboards can often feel sterile, intimidating, and stressful. The calm
 
 ## System Architecture & Class Diagram
 
-The application's initial domain models directly represent the entities actively displayed and managed across the implemented screens:
+<p align="center">
+  <img src="docs/class-diagram.png" alt="DocTient Class Diagram" width="680" style="max-width: 100%; height: auto; border-radius: 8px;" />
+</p>
 
-```mermaid
-classDiagram
-    direction TB
-
-    %% Inheritance
-    User <|-- Patient : inherits
-    User <|-- Doctor : inherits
-
-    %% Relationships
-    Patient "1" o-- "0..*" VitalSign : tracks
-    Patient "1" o-- "0..*" Medication : manages
-    Patient "1" --> "0..*" DoctorReview : writes
-    Doctor "1" o-- "0..*" DoctorReview : receives
-
-    %% Enumerations
-    class UserRole {
-        <<enumeration>>
-        Patient
-        Doctor
-    }
-
-    class VitalStatus {
-        <<enumeration>>
-        Normal
-        Monitor
-        Critical
-    }
-
-    %% Base User Class
-    class User {
-        <<abstract>>
-        +string Id
-        +string FirstName
-        +string LastName
-        +string Email
-        +string PhoneNumber
-        +UserRole Role
-        +DateTime CreatedAt
-        +DateTime? LastLoginAt
-        +string FullName
-        +string Initials
-    }
-
-    %% Patient Subclass
-    class Patient {
-        +List~VitalSign~ VitalSigns
-        +List~Medication~ Medications
-        +List~DoctorReview~ Reviews
-    }
-
-    %% Doctor Subclass
-    class Doctor {
-        +string Specialty
-        +string HospitalOrClinic
-        +bool IsOnline
-        +List~DoctorReview~ Reviews
-        +double AverageRating
-    }
-
-    %% VitalSign Entity
-    class VitalSign {
-        +string Id
-        +string PatientId
-        +string Label
-        +string Value
-        +string Unit
-        +VitalStatus Status
-        +DateTime RecordedAt
-        +string BadgeClass
-        +string Icon
-    }
-
-    %% Medication Entity
-    class Medication {
-        +string Id
-        +string Name
-        +string Dose
-        +string Time
-        +bool Taken
-    }
-
-    %% DoctorReview Entity
-    class DoctorReview {
-        +string Id
-        +string Name
-        +string Initials
-        +int Rating
-        +string Comment
-        +List~string~ Tags
-        +string Visit
-        +DateTime Date
-        +int Helpful
-        +bool Mine
-    }
-```
 
 ---
 
 ## Initial Domain Models
 
-The models are located in [`DocTient/Models`](Models/) and strictly correspond to the currently implemented screens:
+The models reside in [`DocTient/Models`](Models/) and strictly correspond to the currently implemented screens:
 
 | Model | Applicable Screens | Primary Responsibility |
 |---|---|---|
