@@ -142,20 +142,6 @@ Enforces separation of concerns. Doctors and patients have fundamentally differe
 
 ---
 
-### 6. Therapeutic Glassmorphism Design System
-
-#### What It Does
-Employs an intentionally designed dark navy aesthetic featuring frosted glass panels, subtle glowing gradients, and fluid micro-animations.
-
-#### How It Works
-- **Visual Depth:** Uses backdrop blurring (`backdrop-blur-xl`), semi-transparent surfaces (`bg-white/10`), and delicate luminous borders (`border-white/20`).
-- **Micro-Interactions:** Custom CSS animations (`anim-fade-up`, `anim-fade-left`, `anim-float`) stagger the arrival of data cards upon page load.
-- **Card-Lift Hover Effects:** Interactive elements gently elevate (`translateY(-3px)`) when hovered, providing tactile feedback.
-
-#### Clinical Importance
-Medical dashboards can often feel sterile, intimidating, and stressful. The calming dark palette and gentle visual hierarchy reduce cognitive overload and medical anxiety for patients checking their vitals daily.
-
----
 
 ## How DocTient Works in Practice (User Workflows)
 
