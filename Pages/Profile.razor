@@ -1,0 +1,200 @@
+@page "/profile"
+@inject NavigationManager Nav
+
+<div class="min-h-screen flex">
+
+    <!-- Sidebar -->
+    <aside class="hidden md:flex flex-col w-64 glass-strong border-r border-white/10 fixed inset-y-0 left-0 z-30">
+        <div class="px-6 h-16 flex items-center border-b border-white/10 flex-shrink-0">
+            <a href="/" class="flex items-center gap-2.5">
+                <div class="w-8 h-8 bg-sky-500 rounded-lg flex items-center justify-center shadow-lg shadow-sky-500/40">
+                    <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                </div>
+                <span class="text-base font-bold text-white" style="font-family:'DM Sans',sans-serif">DocTient</span>
+            </a>
+        </div>
+        <div class="px-5 py-5 border-b border-white/10 flex-shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-sky-500/20 border border-sky-500/30 rounded-full flex items-center justify-center text-sky-400 text-sm font-bold flex-shrink-0">YS</div>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold text-white truncate">Ycany Sanchez</p>
+                    <p class="text-xs text-white/40 truncate">Patient</p>
+                </div>
+            </div>
+        </div>
+        <nav class="flex-1 px-4 py-4 space-y-0.5 overflow-y-auto" aria-label="Primary">
+            <a href="/dashboard" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/50 hover:bg-white/10 hover:text-white transition">
+                <span class="text-base">🏠</span> Dashboard
+            </a>
+            <a href="/history" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/50 hover:bg-white/10 hover:text-white transition">
+                <span class="text-base">📋</span> Health History
+            </a>
+            <a href="/medications" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/50 hover:bg-white/10 hover:text-white transition">
+                <span class="text-base">💊</span> Medications
+            </a>
+            <a href="/feedback" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/50 hover:bg-white/10 hover:text-white transition">
+                <span class="text-base">⭐</span> Rate Doctor
+            </a>
+            <a href="/doctor-portal" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/50 hover:bg-white/10 hover:text-white transition">
+                <span class="text-base">🩺</span> Doctor Portal
+            </a>
+            <a href="/profile" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm bg-sky-500/20 text-sky-300 border border-sky-500/20 font-semibold transition">
+                <span class="text-base">👤</span> Profile
+            </a>
+        </nav>
+        <div class="px-4 py-5 border-t border-white/10 flex-shrink-0">
+            <button @onclick='() => Nav.NavigateTo("/login")'
+                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/40 hover:bg-red-500/10 hover:text-red-400 transition-all">
+                <span class="text-base">🚪</span> Sign Out
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 md:ml-64 flex flex-col min-h-screen">
+        <header class="sticky top-0 z-20 glass-strong border-b border-white/10 flex-shrink-0">
+            <div class="px-6 h-16 flex items-center justify-between">
+                <div>
+                    <h1 class="text-sm font-semibold text-white">Account & Profile 👤</h1>
+                    <p class="text-xs text-white/40">Personal health profile and account settings</p>
+                </div>
+                <button @onclick='() => Nav.NavigateTo("/dashboard")'
+                        class="px-3.5 py-1.5 text-xs font-medium text-white glass-inset hover:bg-white/10 rounded-xl transition">
+                    ← Dashboard
+                </button>
+            </div>
+        </header>
+
+        <main class="flex-1 px-6 py-8 max-w-4xl mx-auto w-full space-y-6">
+
+            <!-- Profile Hero Card -->
+            <div class="glass rounded-3xl p-7 card-lift relative overflow-hidden">
+                <div class="absolute -right-16 -top-16 w-60 h-60 rounded-full bg-sky-500/15 blur-3xl pointer-events-none"></div>
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-5 relative">
+                    <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-500 flex items-center justify-center text-white text-2xl font-bold shadow-xl shadow-sky-500/30 shrink-0">
+                        YS
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-3 flex-wrap">
+                            <h2 class="text-2xl font-bold text-white tracking-tight" style="font-family:'DM Sans',sans-serif">Ycany Sanchez</h2>
+                            <span class="px-3 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                                Verified Patient
+                            </span>
+                        </div>
+                        <p class="text-sm text-white/50 mt-1">ycanyashra@gmail.com · Member since November 2026</p>
+                        <p class="text-xs text-sky-300 mt-2">Connected Primary Physician: Dr. Rafael Cruz (Makati Med)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messages -->
+            @if (!string.IsNullOrEmpty(SuccessMsg))
+            {
+                <div class="px-4 py-3 bg-emerald-500/20 border border-emerald-500/30 rounded-xl text-sm text-emerald-300 flex items-center justify-between anim-fade-in">
+                    <span>@SuccessMsg</span>
+                    <button @onclick="() => SuccessMsg = string.Empty" class="text-xs text-emerald-200">✕</button>
+                </div>
+            }
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Personal Information -->
+                <div class="glass rounded-2xl p-6 card-lift space-y-4">
+                    <h3 class="text-sm font-semibold text-white">Personal Information</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-medium text-white/50 mb-1">Full Name</label>
+                            <input @bind="FullName" type="text"
+                                   class="w-full px-3.5 py-2 text-sm glass-input rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50" />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-white/50 mb-1">Email Address</label>
+                            <input @bind="Email" type="email" disabled
+                                   class="w-full px-3.5 py-2 text-sm glass-input rounded-xl text-white/60 bg-white/5 cursor-not-allowed" />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-white/50 mb-1">Phone Number</label>
+                            <input @bind="Phone" type="text" placeholder="+63 912 345 6789"
+                                   class="w-full px-3.5 py-2 text-sm glass-input rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50" />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-white/50 mb-1">Emergency Contact</label>
+                            <input @bind="EmergencyContact" type="text" placeholder="Maria Sanchez (Mother) — +63 998 765 4321"
+                                   class="w-full px-3.5 py-2 text-sm glass-input rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50" />
+                        </div>
+                    </div>
+
+                    <button @onclick="SaveProfile"
+                            class="w-full py-2.5 text-sm font-semibold text-white bg-sky-500 hover:bg-sky-400 rounded-xl transition shadow-lg shadow-sky-500/30">
+                        Save Changes
+                    </button>
+                </div>
+
+                <!-- Preferences & Security -->
+                <div class="space-y-6">
+                    <div class="glass rounded-2xl p-6 card-lift space-y-4">
+                        <h3 class="text-sm font-semibold text-white">Care Preferences</h3>
+                        <div class="space-y-3 text-sm">
+                            <label class="flex items-center justify-between p-3 rounded-xl glass-inset cursor-pointer">
+                                <div>
+                                    <span class="text-white block font-medium">Daily Vitals Reminders</span>
+                                    <span class="text-xs text-white/40">Alert at 8:00 AM if vitals unlogged</span>
+                                </div>
+                                <input type="checkbox" @bind="RemindVitals" class="rounded accent-sky-500 w-4 h-4" />
+                            </label>
+
+                            <label class="flex items-center justify-between p-3 rounded-xl glass-inset cursor-pointer">
+                                <div>
+                                    <span class="text-white block font-medium">Medication Adherence Alerts</span>
+                                    <span class="text-xs text-white/40">Notification when prescription is due</span>
+                                </div>
+                                <input type="checkbox" @bind="RemindMeds" class="rounded accent-sky-500 w-4 h-4" />
+                            </label>
+
+                            <label class="flex items-center justify-between p-3 rounded-xl glass-inset cursor-pointer">
+                                <div>
+                                    <span class="text-white block font-medium">Doctor Telemetry Sync</span>
+                                    <span class="text-xs text-white/40">Share continuous logs with Dr. Cruz</span>
+                                </div>
+                                <input type="checkbox" @bind="ShareTelemetry" class="rounded accent-sky-500 w-4 h-4" />
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="glass rounded-2xl p-6 card-lift flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-semibold text-white">Sign Out</p>
+                            <p class="text-xs text-white/40">End current session on this device</p>
+                        </div>
+                        <button @onclick='() => Nav.NavigateTo("/login")'
+                                class="px-4 py-2 text-xs font-semibold rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 transition">
+                            Sign Out
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+</div>
+
+@code {
+    string FullName = "Ycany Sanchez";
+    string Email = "ycanyashra@gmail.com";
+    string Phone = "+63 912 345 6789";
+    string EmergencyContact = "Maria Sanchez (Mother) — +63 998 765 4321";
+
+    bool RemindVitals = true;
+    bool RemindMeds = true;
+    bool ShareTelemetry = true;
+
+    string SuccessMsg = "";
+
+    void SaveProfile()
+    {
+        SuccessMsg = "Profile information updated successfully.";
+    }
+}
