@@ -1,0 +1,337 @@
+@page "/history"
+@inject NavigationManager Nav
+
+<div class="min-h-screen flex">
+
+    <!-- Sidebar -->
+    <aside class="hidden md:flex flex-col w-64 glass-strong border-r border-white/10 fixed inset-y-0 left-0 z-30">
+        <div class="px-6 h-16 flex items-center border-b border-white/10 flex-shrink-0">
+            <a href="/" class="flex items-center gap-2.5">
+                <div class="w-8 h-8 bg-sky-500 rounded-lg flex items-center justify-center shadow-lg shadow-sky-500/40">
+                    <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                </div>
+                <span class="text-base font-bold text-white" style="font-family:'DM Sans',sans-serif">DocTient</span>
+            </a>
+        </div>
+        <div class="px-5 py-5 border-b border-white/10 flex-shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-sky-500/20 border border-sky-500/30 rounded-full flex items-center justify-center text-sky-400 text-sm font-bold flex-shrink-0">YS</div>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold text-white truncate">Ycany Sanchez</p>
+                    <p class="text-xs text-white/40 truncate">Patient</p>
+                </div>
+            </div>
+        </div>
+        <nav class="flex-1 px-4 py-4 space-y-0.5 overflow-y-auto" aria-label="Primary">
+            <a href="/dashboard" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/50 hover:bg-white/10 hover:text-white transition">
+                <span class="text-base">🏠</span> Dashboard
+            </a>
+            <a href="/history" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm bg-sky-500/20 text-sky-300 border border-sky-500/20 font-semibold transition">
+                <span class="text-base">📋</span> Health History
+            </a>
+            <a href="/medications" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/50 hover:bg-white/10 hover:text-white transition">
+                <span class="text-base">💊</span> Medications
+            </a>
+            <a href="/feedback" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/50 hover:bg-white/10 hover:text-white transition">
+                <span class="text-base">⭐</span> Rate Doctor
+            </a>
+            <a href="/doctor-portal" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/50 hover:bg-white/10 hover:text-white transition">
+                <span class="text-base">🩺</span> Doctor Portal
+            </a>
+            <a href="/profile" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/50 hover:bg-white/10 hover:text-white transition">
+                <span class="text-base">👤</span> Profile
+            </a>
+        </nav>
+        <div class="px-4 py-5 border-t border-white/10 flex-shrink-0">
+            <button @onclick='() => Nav.NavigateTo("/login")'
+                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/40 hover:bg-red-500/10 hover:text-red-400 transition-all">
+                <span class="text-base">🚪</span> Sign Out
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 md:ml-64 flex flex-col min-h-screen">
+        <header class="sticky top-0 z-20 glass-strong border-b border-white/10 flex-shrink-0">
+            <div class="px-6 h-16 flex items-center justify-between">
+                <div>
+                    <h1 class="text-sm font-semibold text-white">Health History & Logs 📋</h1>
+                    <p class="text-xs text-white/40">Longitudinal vitals & physiological trends</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button @onclick='() => Nav.NavigateTo("/dashboard")'
+                            class="px-3.5 py-1.5 text-xs font-medium text-white glass-inset hover:bg-white/10 rounded-xl transition">
+                        ← Dashboard
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 px-6 py-6 max-w-5xl mx-auto w-full space-y-6">
+
+            <!-- Summary KPI Bento -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="glass rounded-2xl p-5 card-lift">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-medium text-rose-300">Heart Rate</span>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/20 text-emerald-300">Normal</span>
+                    </div>
+                    <p class="text-2xl font-bold text-white">72 <span class="text-xs font-normal text-white/50">bpm</span></p>
+                    <p class="text-[11px] text-white/40 mt-1">7-day avg 74 bpm</p>
+                </div>
+
+                <div class="glass rounded-2xl p-5 card-lift">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-medium text-sky-300">Blood Pressure</span>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/20 text-emerald-300">Normal</span>
+                    </div>
+                    <p class="text-2xl font-bold text-white">118/76 <span class="text-xs font-normal text-white/50">mmHg</span></p>
+                    <p class="text-[11px] text-white/40 mt-1">SYS 118 · DIA 76</p>
+                </div>
+
+                <div class="glass rounded-2xl p-5 card-lift">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-medium text-emerald-300">Blood Oxygen</span>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/20 text-emerald-300">Normal</span>
+                    </div>
+                    <p class="text-2xl font-bold text-white">98 <span class="text-xs font-normal text-white/50">%</span></p>
+                    <p class="text-[11px] text-white/40 mt-1">Optimal SpO2</p>
+                </div>
+
+                <div class="glass rounded-2xl p-5 card-lift">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-medium text-violet-300">Weight</span>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-500/20 text-amber-300">Monitor</span>
+                    </div>
+                    <p class="text-2xl font-bold text-white">68.2 <span class="text-xs font-normal text-white/50">kg</span></p>
+                    <p class="text-[11px] text-white/40 mt-1">-0.3 kg this week</p>
+                </div>
+            </div>
+
+            <!-- Messages -->
+            @if (!string.IsNullOrEmpty(SuccessMsg))
+            {
+                <div class="px-4 py-3 bg-emerald-500/20 border border-emerald-500/30 rounded-xl text-sm text-emerald-300 flex items-center justify-between anim-fade-in">
+                    <span>@SuccessMsg</span>
+                    <button @onclick="() => SuccessMsg = string.Empty" class="text-xs text-emerald-200">✕</button>
+                </div>
+            }
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                <!-- Left 2 Cols: Timeline History -->
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <h2 class="text-base font-semibold text-white">Recorded Measurements (@FilteredLogs.Count)</h2>
+
+                        <!-- Metric Filters -->
+                        <div class="flex gap-1.5 flex-wrap">
+                            @foreach (var f in FilterOptions)
+                            {
+                                <button @onclick="() => SelectedFilter = f"
+                                        class="px-2.5 py-1 text-xs rounded-lg transition @(SelectedFilter == f ? "bg-sky-500 text-white font-medium" : "bg-white/5 text-white/50 hover:bg-white/10 hover:text-white")">
+                                    @f
+                                </button>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        @foreach (var log in FilteredLogs)
+                        {
+                            <div class="glass rounded-2xl p-4 card-lift flex items-start gap-4 transition duration-200 border-white/10">
+                                <div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0 glass-inset">
+                                    @log.Icon
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center justify-between flex-wrap gap-2">
+                                        <div class="flex items-center gap-2">
+                                            <p class="text-sm font-semibold text-white">@log.Label</p>
+                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-medium @GetStatusBadge(log.Status)">
+                                                @log.Status
+                                            </span>
+                                        </div>
+                                        <span class="text-xs text-white/30">@log.Timestamp.ToString("MMM d, yyyy · h:mm tt")</span>
+                                    </div>
+
+                                    <p class="text-lg font-bold text-white mt-1">
+                                        @log.Value <span class="text-xs font-normal text-white/50">@log.Unit</span>
+                                    </p>
+
+                                    @if (!string.IsNullOrEmpty(log.Notes))
+                                    {
+                                        <p class="text-xs text-white/50 mt-1 italic">"@log.Notes"</p>
+                                    }
+                                </div>
+
+                                <button @onclick="() => RemoveLog(log)" title="Delete entry"
+                                        class="w-7 h-7 rounded-lg flex items-center justify-center text-xs text-white/20 hover:text-red-400 hover:bg-red-500/10 transition">
+                                    ✕
+                                </button>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Right 1 Col: Log Reading Form -->
+                <div class="glass rounded-2xl p-6 card-lift h-fit space-y-4">
+                    <h3 class="text-sm font-semibold text-white">Log Vital Reading</h3>
+                    <p class="text-xs text-white/40">Enter latest reading to update your health trend.</p>
+
+                    <div>
+                        <label class="block text-xs font-medium text-white/70 mb-1">Biomarker</label>
+                        <select @bind="NewMetric"
+                                class="w-full px-3.5 py-2 text-sm glass-input rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50">
+                            <option class="bg-slate-800 text-white">Blood Pressure (mmHg)</option>
+                            <option class="bg-slate-800 text-white">Heart Rate (bpm)</option>
+                            <option class="bg-slate-800 text-white">Body Temperature (°C)</option>
+                            <option class="bg-slate-800 text-white">Blood Oxygen (%)</option>
+                            <option class="bg-slate-800 text-white">Body Weight (kg)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-white/70 mb-1">Value</label>
+                        <input @bind="NewValue" type="text" placeholder="@GetPlaceholder()"
+                               class="w-full px-3.5 py-2 text-sm glass-input rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-sky-500/50" />
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-white/70 mb-1">Context Notes (optional)</label>
+                        <input @bind="NewNotes" type="text" placeholder="e.g. After 15 min rest, fasting..."
+                               class="w-full px-3.5 py-2 text-sm glass-input rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-sky-500/50" />
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(FormError))
+                    {
+                        <p class="text-xs text-red-400">@FormError</p>
+                    }
+
+                    <button @onclick="AddReading"
+                            class="w-full py-2.5 text-sm font-semibold text-white bg-sky-500 hover:bg-sky-400 rounded-xl transition shadow-lg shadow-sky-500/30">
+                        + Record Vitals Log
+                    </button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</div>
+
+@code {
+    record VitalEntry(long Id, string Label, string Value, string Unit, string Status, string Notes, DateTime Timestamp, string Icon);
+
+    string SelectedFilter = "All";
+    string[] FilterOptions = ["All", "Blood Pressure", "Heart Rate", "Temperature", "Blood Oxygen", "Weight"];
+
+    string NewMetric = "Blood Pressure (mmHg)";
+    string NewValue = "";
+    string NewNotes = "";
+    string FormError = "";
+    string SuccessMsg = "";
+
+    List<VitalEntry> Logs = new()
+    {
+        new(1, "Blood Pressure", "118/76", "mmHg", "Normal", "Post-morning walk resting reading", DateTime.Now.AddHours(-3), "❤️"),
+        new(2, "Heart Rate", "72", "bpm", "Normal", "Steady resting pulse", DateTime.Now.AddHours(-3), "💓"),
+        new(3, "Blood Oxygen", "98", "%", "Normal", "Normal saturation room air", DateTime.Now.AddHours(-5), "🫁"),
+        new(4, "Temperature", "36.5", "°C", "Normal", "Normal baseline", DateTime.Now.AddHours(-8), "🌡️"),
+        new(5, "Weight", "68.2", "kg", "Monitor", "Down 0.3 kg this week", DateTime.Now.AddDays(-1), "⚖️"),
+        new(6, "Blood Pressure", "121/79", "mmHg", "Normal", "Routine follow-up clinic check", DateTime.Now.AddDays(-2), "❤️"),
+        new(7, "Heart Rate", "75", "bpm", "Normal", "After climbing stairs", DateTime.Now.AddDays(-2), "💓"),
+        new(8, "Blood Oxygen", "97", "%", "Normal", "Routine reading", DateTime.Now.AddDays(-4), "🫁"),
+    };
+
+    List<VitalEntry> FilteredLogs => SelectedFilter == "All"
+        ? Logs.OrderByDescending(l => l.Timestamp).ToList()
+        : Logs.Where(l => l.Label.Contains(SelectedFilter, StringComparison.OrdinalIgnoreCase)).OrderByDescending(l => l.Timestamp).ToList();
+
+    string GetPlaceholder() => NewMetric switch
+    {
+        "Blood Pressure (mmHg)" => "e.g. 120/80",
+        "Heart Rate (bpm)" => "e.g. 72",
+        "Body Temperature (°C)" => "e.g. 36.6",
+        "Blood Oxygen (%)" => "e.g. 98",
+        "Body Weight (kg)" => "e.g. 68.5",
+        _ => "e.g. 100"
+    };
+
+    string GetStatusBadge(string status) => status switch
+    {
+        "Normal" => "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30",
+        "Monitor" => "bg-amber-500/20 text-amber-300 border border-amber-500/30",
+        "Critical" => "bg-rose-500/20 text-rose-300 border border-rose-500/30",
+        _ => "bg-white/10 text-white/60"
+    };
+
+    void AddReading()
+    {
+        FormError = "";
+        SuccessMsg = "";
+
+        if (string.IsNullOrWhiteSpace(NewValue))
+        {
+            FormError = "Please enter a value for the reading.";
+            return;
+        }
+
+        string label = "";
+        string unit = "";
+        string icon = "📊";
+        string status = "Normal";
+
+        if (NewMetric.Contains("Blood Pressure"))
+        {
+            label = "Blood Pressure";
+            unit = "mmHg";
+            icon = "❤️";
+            status = NewValue.StartsWith("14") || NewValue.StartsWith("15") ? "Critical" : (NewValue.StartsWith("13") ? "Monitor" : "Normal");
+        }
+        else if (NewMetric.Contains("Heart Rate"))
+        {
+            label = "Heart Rate";
+            unit = "bpm";
+            icon = "💓";
+            if (int.TryParse(NewValue, out var hr))
+                status = hr > 100 ? "Critical" : (hr > 85 ? "Monitor" : "Normal");
+        }
+        else if (NewMetric.Contains("Temperature"))
+        {
+            label = "Temperature";
+            unit = "°C";
+            icon = "🌡️";
+            if (double.TryParse(NewValue, out var temp))
+                status = temp >= 38.0 ? "Critical" : (temp >= 37.5 ? "Monitor" : "Normal");
+        }
+        else if (NewMetric.Contains("Blood Oxygen"))
+        {
+            label = "Blood Oxygen";
+            unit = "%";
+            icon = "🫁";
+            if (int.TryParse(NewValue, out var ox))
+                status = ox < 92 ? "Critical" : (ox < 95 ? "Monitor" : "Normal");
+        }
+        else if (NewMetric.Contains("Weight"))
+        {
+            label = "Weight";
+            unit = "kg";
+            icon = "⚖️";
+            status = "Normal";
+        }
+
+        var entry = new VitalEntry(Logs.Count + 1, label, NewValue.Trim(), unit, status, NewNotes.Trim(), DateTime.Now, icon);
+        Logs.Insert(0, entry);
+
+        SuccessMsg = $"Logged {label} reading ({NewValue} {unit}) as {status}.";
+        NewValue = "";
+        NewNotes = "";
+    }
+
+    void RemoveLog(VitalEntry log)
+    {
+        Logs.Remove(log);
+        SuccessMsg = "Log removed.";
+    }
+}

@@ -323,8 +323,8 @@
     record SidebarItem(string Icon, string Label, string Href, bool Active);
     SidebarItem[] SidebarItems = [
         new("fa-solid fa-house", "Dashboard",      "/dashboard", true),
-        new("fa-solid fa-heart-pulse",  "My Health",     "#",          false),
-        new("fa-solid fa-clipboard-list", "Health History", "#",          false),
+        new("fa-solid fa-heart-pulse", "My Health", "/history", false),
+        new("fa-solid fa-clipboard-list", "Health History", "/history", false),
         new("fa-solid fa-pills",    "Medications",    "/medications", false),
         new("fa-solid fa-star", "Rate Doctor",    "/feedback",  false),
         new("fa-solid fa-comments",       "Messages",       "#",          false),
@@ -354,4 +354,5 @@
         new() { Name = "Losartan",   Dose = "25 mg",   Time = "8:00 PM",  Taken = false },
     ];
 }
+
 
