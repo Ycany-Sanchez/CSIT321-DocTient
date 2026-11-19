@@ -302,10 +302,14 @@ DocTient/
 │   └── VitalSign.cs
 ├── Pages/                      # Currently implemented routed components
 │   ├── Dashboard.razor         # Patient health metrics & medications
+│   ├── DoctorDashboard.razor   # Doctor oversight portal, telemetry & clinical notes
 │   ├── Feedback.razor          # Live Supabase CRUD for doctor ratings & reviews
+│   ├── History.razor           # Health history logs and vitals telemetry trends
 │   ├── Home.razor              # Public landing page and hero section
-│   ├── Login.razor             # Role-selected authentication
-│   └── Signup.razor            # User & practitioner registration
+│   ├── Login.razor             # Role-selected authentication with Supabase
+│   ├── Medications.razor       # Daily prescription reminders & adherence tracking
+│   ├── Profile.razor           # User health profile, emergency contact & settings
+│   └── Signup.razor            # Role-separated patient & doctor registration
 ├── Properties/
 │   └── launchSettings.json     # Local development server ports
 ├── wwwroot/
