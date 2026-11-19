@@ -1,5 +1,6 @@
 @page "/feedback"
 @inject NavigationManager Nav
+@inject Supabase.Client Db
 
 <div class="min-h-screen flex">
 
@@ -72,8 +73,16 @@
         <main class="flex-1 px-6 py-6 max-w-6xl mx-auto w-full space-y-6">
 
             <div class="anim-fade-up">
-                <h2 class="text-xl font-bold text-white tracking-tight text-balance" style="font-family:'DM Sans',sans-serif">How was your consultation?</h2>
-                <p class="text-sm text-white/50 mt-1 max-w-xl leading-relaxed">Your rating helps Dr. Cruz and other patients. It only takes a few seconds.</p>
+                <div class="flex items-center justify-between flex-wrap gap-2">
+                    <div>
+                        <h2 class="text-xl font-bold text-white tracking-tight text-balance" style="font-family:'DM Sans',sans-serif">How was your consultation?</h2>
+                        <p class="text-sm text-white/50 mt-1 max-w-xl leading-relaxed">Your rating helps Dr. Cruz and other patients. It only takes a few seconds.</p>
+                    </div>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        Supabase Connected
+                    </span>
+                </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
@@ -105,14 +114,16 @@
 
                     @if (!string.IsNullOrEmpty(ErrorMsg))
                     {
-                        <div class="mb-4 px-4 py-3 bg-red-500/20 border border-red-500/30 rounded-xl text-sm text-red-300 anim-fade-in">
-                            @ErrorMsg
+                        <div class="mb-4 px-4 py-3 bg-red-500/20 border border-red-500/30 rounded-xl text-sm text-red-300 anim-fade-in flex items-center justify-between">
+                            <span>@ErrorMsg</span>
+                            <button @onclick="() => ErrorMsg = string.Empty" class="text-xs text-red-200 hover:text-white">✕</button>
                         </div>
                     }
                     @if (!string.IsNullOrEmpty(SuccessMsg))
                     {
-                        <div class="mb-4 px-4 py-3 bg-emerald-500/20 border border-emerald-500/30 rounded-xl text-sm text-emerald-300 anim-fade-in">
-                            @SuccessMsg
+                        <div class="mb-4 px-4 py-3 bg-emerald-500/20 border border-emerald-500/30 rounded-xl text-sm text-emerald-300 anim-fade-in flex items-center justify-between">
+                            <span>@SuccessMsg</span>
+                            <button @onclick="() => SuccessMsg = string.Empty" class="text-xs text-emerald-200 hover:text-white">✕</button>
                         </div>
                     }
 
@@ -198,8 +209,8 @@
                     </div>
 
                     <div class="bg-sky-500/10 backdrop-blur-[6px] backdrop-saturate-150 border border-sky-500/20 rounded-2xl p-5 anim-fade-up delay-400">
-                        <p class="text-sm font-semibold text-sky-300 mb-1">💡 Be kind & specific</p>
-                        <p class="text-xs text-white/50 leading-relaxed">Mention what helped — clear explanations, short waits, caring follow-up. Avoid sharing sensitive medical details publicly.</p>
+                        <p class="text-sm font-semibold text-sky-300 mb-1">💡 Soft Delete in Practice</p>
+                        <p class="text-xs text-white/50 leading-relaxed">Reviews marked for deletion update <code class="text-sky-300">deleted_at</code> in Supabase. The record is preserved in Postgres for auditing, but excluded from patient views.</p>
                     </div>
                 </div>
             </div>
@@ -207,10 +218,22 @@
             <!-- Reviews list -->
             <div class="glass rounded-2xl overflow-hidden card-lift anim-fade-up delay-500">
                 <div class="px-5 py-4 border-b border-white/10 flex items-center justify-between">
-                    <p class="text-sm font-semibold text-white">Patient Reviews (@Reviews.Count)</p>
-                    <span class="text-xs text-white/40">Newest first · front-end only</span>
+                    <div class="flex items-center gap-2">
+                        <p class="text-sm font-semibold text-white">Patient Reviews (@Reviews.Count)</p>
+                        @if (IsLoadingReviews)
+                        {
+                            <span class="text-xs text-sky-400 animate-spin">⟳</span>
+                        }
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button @onclick="Load" title="Reload from Supabase" class="text-xs text-white/40 hover:text-white transition flex items-center gap-1">
+                            <span>↻</span> Refresh
+                        </button>
+                        <span class="text-xs text-emerald-400/80 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">Supabase live</span>
+                    </div>
                 </div>
-                @if (Reviews.Count == 0)
+
+                @if (Reviews.Count == 0 && !IsLoadingReviews)
                 {
                     <div class="px-5 py-10 text-center">
                         <p class="text-3xl mb-2">💬</p>
@@ -218,11 +241,14 @@
                         <p class="text-xs text-white/40 mt-1">Be the first to rate your visit above.</p>
                     </div>
                 }
+
                 @foreach (var r in Reviews)
                 {
                     <div class="px-5 py-4 border-b border-white/5 last:border-0 hover:bg-white/5 transition">
                         <div class="flex items-start gap-3">
-                            <div class="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 @(r.Mine ? "bg-sky-500/20 border border-sky-500/30 text-sky-300" : "bg-white/10 border border-white/10 text-white/60")">@r.Initials</div>
+                            <div class="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 @(r.Mine ? "bg-sky-500/20 border border-sky-500/30 text-sky-300" : "bg-white/10 border border-white/10 text-white/60")">
+                                @r.Initials
+                            </div>
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center gap-2 flex-wrap">
                                     <p class="text-sm font-semibold text-white">@r.Name</p>
@@ -230,8 +256,10 @@
                                     {
                                         <span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-sky-500/20 text-sky-300 border border-sky-500/30">You</span>
                                     }
-                                    <span class="text-xs text-white/30">@r.Date.ToString("MMM d, h:mm tt")</span>
+                                    <span class="text-xs text-white/30">@r.CreatedAt.ToLocalTime().ToString("MMM d, h:mm tt")</span>
+                                    <span class="text-[10px] text-white/20 font-mono">#@r.Id</span>
                                 </div>
+
                                 <div class="flex items-center gap-1 my-1 text-base leading-none">
                                     @for (int i = 1; i <= 5; i++)
                                     {
@@ -239,23 +267,56 @@
                                     }
                                     <span class="ml-2 text-[11px] text-white/30 truncate">📋 @r.Visit</span>
                                 </div>
-                                @if (r.Tags.Count > 0)
+
+                                @if (r.TagList.Count > 0)
                                 {
                                     <div class="flex flex-wrap gap-1.5 my-2">
-                                        @foreach (var t in r.Tags)
+                                        @foreach (var t in r.TagList)
                                         {
                                             <span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-white/5 text-white/50 border border-white/10">@t</span>
                                         }
                                     </div>
                                 }
-                                <p class="text-sm text-white/70 leading-relaxed">@r.Comment</p>
-                                <div class="flex items-center gap-3 mt-2">
-                                    <button @onclick="() => r.Helpful++" class="text-xs text-white/40 hover:text-sky-300 transition">
-                                        👍 Helpful (@r.Helpful)
+
+                                @if (EditingReviewId == r.Id)
+                                {
+                                    <!-- Inline Edit mode (Step 8: Update) -->
+                                    <div class="my-2 p-3 rounded-xl bg-white/5 border border-sky-500/30 space-y-2">
+                                        <textarea @bind="EditingComment" rows="2"
+                                                  class="w-full px-3 py-2 text-sm rounded-lg glass-input text-white resize-none focus:outline-none focus:ring-1 focus:ring-sky-400"></textarea>
+                                        <div class="flex items-center gap-2 justify-end">
+                                            <button @onclick="CancelEdit" class="px-3 py-1 text-xs text-white/60 hover:text-white rounded-lg transition">Cancel</button>
+                                            <button @onclick="() => SaveEdit(r)" class="px-3 py-1 text-xs font-semibold bg-sky-500 hover:bg-sky-400 text-white rounded-lg transition">Save</button>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <p class="text-sm text-white/70 leading-relaxed">@r.Comment</p>
+                                }
+
+                                <div class="flex items-center gap-4 mt-2.5 flex-wrap">
+                                    <!-- Step 8: Update numeric field (Helpful +1) -->
+                                    <button @onclick="() => IncrementHelpful(r)" title="Vote helpful"
+                                            class="text-xs text-white/40 hover:text-sky-300 transition flex items-center gap-1 group">
+                                        <span class="group-hover:scale-125 transition-transform">👍</span> Helpful (@r.Helpful)
                                     </button>
+
                                     @if (r.Mine)
                                     {
-                                        <button @onclick="() => DeleteReview(r)" class="text-xs text-white/30 hover:text-red-400 transition">Delete</button>
+                                        <!-- Step 8: Update text field -->
+                                        @if (EditingReviewId != r.Id)
+                                        {
+                                            <button @onclick="() => StartEdit(r)" class="text-xs text-sky-400/80 hover:text-sky-300 transition">
+                                                ✏️ Edit
+                                            </button>
+                                        }
+
+                                        <!-- Step 8: Soft Delete (sets deleted_at) -->
+                                        <button @onclick="() => RemoveReview(r)"
+                                                class="text-xs text-red-400/60 hover:text-red-400 transition flex items-center gap-1">
+                                            🗑️ Soft Delete
+                                        </button>
                                     }
                                 </div>
                             </div>
@@ -285,7 +346,6 @@
     string[] RatingLabels = ["Poor", "Fair", "Good", "Very Good", "Excellent"];
     string[] AllTags = ["Friendly", "On-time", "Clear explanation", "Listens well", "Caring follow-up", "Clean clinic"];
 
-    // DocTient-relevant: visits mirror Dashboard Recent Health Records dates
     string[] Visits = [
         "Sep 17 · Follow-up — BP 118/76, HR 72 bpm",
         "Sep 10 · General Checkup — BP 121/79, HR 75 bpm",
@@ -300,27 +360,45 @@
     string ErrorMsg = "";
     string SuccessMsg = "";
     bool Loading = false;
+    bool IsLoadingReviews = false;
 
-    class Review
-    {
-        public string Name = "";
-        public string Initials = "";
-        public int Rating = 5;
-        public string Comment = "";
-        public List<string> Tags = new();
-        public string Visit = "";
-        public DateTime Date = DateTime.Now;
-        public int Helpful = 0;
-        public bool Mine = false;
-    }
+    // List of active reviews loaded from Supabase
+    List<DoctorReview> Reviews = new();
 
-    List<Review> Reviews = new()
-    {
-        new() { Name = "Maria Santos", Initials = "MS", Rating = 5, Comment = "Dr. Cruz explained my lab results clearly and never rushed. Highly recommended!", Tags = new() { "Clear explanation", "Friendly" }, Visit = "Sep 10 · General Checkup — BP 121/79, HR 75 bpm", Date = DateTime.Now.AddDays(-2), Helpful = 12 },
-        new() { Name = "Jose Dela Cruz", Initials = "JD", Rating = 4, Comment = "Good follow-up after my checkup. Waiting time was a bit long but care was excellent.", Tags = new() { "Caring follow-up" }, Visit = "Sep 03 · Lab Review — Blood Oxygen 98%", Date = DateTime.Now.AddDays(-5), Helpful = 5 },
-    };
+    // Inline edit state
+    long? EditingReviewId = null;
+    string EditingComment = "";
 
     double AverageRating => Reviews.Count == 0 ? 0 : Reviews.Average(r => r.Rating);
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Load();
+    }
+
+    // Step 6: Show the rows on a page (skips rows with deleted_at != null)
+    async Task Load()
+    {
+        IsLoadingReviews = true;
+        try
+        {
+            var res = await Db.From<DoctorReview>()
+                .Where(r => r.DeletedAt == null)
+                .Order(r => r.Id, Ordering.Descending)
+                .Range(0, 49)
+                .Get();
+
+            Reviews = res.Models;
+        }
+        catch (Exception ex)
+        {
+            ErrorMsg = $"Error loading reviews from database: {ex.Message}";
+        }
+        finally
+        {
+            IsLoadingReviews = false;
+        }
+    }
 
     void SetRating(int value)
     {
@@ -341,14 +419,14 @@
         Comment = "";
         SelectedTags.Clear();
         SelectedVisit = Visits[0];
-        ErrorMsg = "";
-        SuccessMsg = "";
     }
 
+    // Step 7: Create: add a new row (disabled button while saving)
     async Task HandleSubmit()
     {
         ErrorMsg = "";
         SuccessMsg = "";
+
         if (string.IsNullOrWhiteSpace(SelectedVisit))
         {
             ErrorMsg = "Please choose which visit you are rating.";
@@ -369,32 +447,108 @@
             ErrorMsg = $"Comment must be {MaxComment} characters or less.";
             return;
         }
-        Loading = true;
-        await Task.Delay(600);
-        Loading = false;
 
-        Reviews.Insert(0, new Review
+        Loading = true;
+        try
         {
-            Name = "Alex Reyes",
-            Initials = "AR",
-            Rating = SelectedRating,
-            Comment = Comment.Trim(),
-            Tags = SelectedTags.ToList(),
-            Visit = SelectedVisit,
-            Date = DateTime.Now,
-            Mine = true
-        });
-        SuccessMsg = "Thanks! Your review was posted.";
-        SelectedRating = 0;
-        HoverRating = 0;
-        Comment = "";
-        SelectedTags.Clear();
-        SelectedVisit = Visits[0];
+            var newReview = new DoctorReview
+            {
+                Name = "Alex Reyes",
+                Initials = "AR",
+                Rating = SelectedRating,
+                Comment = Comment.Trim(),
+                Tags = string.Join(", ", SelectedTags),
+                Visit = SelectedVisit,
+                Helpful = 0,
+                Mine = true,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            await Db.From<DoctorReview>().Insert(newReview);
+            SuccessMsg = "Thanks! Your review has been saved to Supabase.";
+            ResetForm();
+            await Load();
+        }
+        catch (Exception ex)
+        {
+            ErrorMsg = $"Database insert error: {ex.Message}";
+        }
+        finally
+        {
+            Loading = false;
+        }
     }
 
-    void DeleteReview(Review review)
+    // Step 8: Update (Increment helpful counter)
+    async Task IncrementHelpful(DoctorReview r)
     {
-        Reviews.Remove(review);
-        SuccessMsg = "";
+        try
+        {
+            await Db.From<DoctorReview>()
+                .Where(x => x.Id == r.Id)
+                .Set(x => x.Helpful, r.Helpful + 1)
+                .Update();
+
+            await Load();
+        }
+        catch (Exception ex)
+        {
+            ErrorMsg = $"Error updating helpful score: {ex.Message}";
+        }
+    }
+
+    // Step 8: Update (Edit comment text)
+    void StartEdit(DoctorReview r)
+    {
+        EditingReviewId = r.Id;
+        EditingComment = r.Comment;
+    }
+
+    void CancelEdit()
+    {
+        EditingReviewId = null;
+        EditingComment = "";
+    }
+
+    async Task SaveEdit(DoctorReview r)
+    {
+        if (string.IsNullOrWhiteSpace(EditingComment))
+            return;
+
+        try
+        {
+            await Db.From<DoctorReview>()
+                .Where(x => x.Id == r.Id)
+                .Set(x => x.Comment, EditingComment.Trim())
+                .Update();
+
+            EditingReviewId = null;
+            EditingComment = "";
+            SuccessMsg = "Review updated successfully.";
+            await Load();
+        }
+        catch (Exception ex)
+        {
+            ErrorMsg = $"Error updating review comment: {ex.Message}";
+        }
+    }
+
+    // Step 8: Soft Delete (Remove only fills in deleted_at; row stays in DB)
+    async Task RemoveReview(DoctorReview r)
+    {
+        try
+        {
+            await Db.From<DoctorReview>()
+                .Where(x => x.Id == r.Id)
+                .Set(x => x.DeletedAt!, DateTime.UtcNow)
+                .Update();
+
+            SuccessMsg = "Review soft deleted. It is safely archived in the database.";
+            await Load();
+        }
+        catch (Exception ex)
+        {
+            ErrorMsg = $"Error soft deleting review: {ex.Message}";
+        }
     }
 }

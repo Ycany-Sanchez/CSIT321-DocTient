@@ -1,15 +1,48 @@
-﻿namespace DocTient.Models;
+using System.Text.Json.Serialization;
+using Supabase.Postgrest.Attributes;
+using Supabase.Postgrest.Models;
 
-public class DoctorReview
+namespace DocTient.Models;
+
+[Table("doctor_reviews")]
+public class DoctorReview : BaseModel
 {
-    public string Id { get; set; } = Guid.NewGuid().ToString("N");
-    public string Name { get; set; } = string.Empty;
-    public string Initials { get; set; } = string.Empty;
+    [PrimaryKey("id", false)]
+    public long Id { get; set; }
+
+    [Column("name")]
+    public string Name { get; set; } = "";
+
+    [Column("initials")]
+    public string Initials { get; set; } = "";
+
+    [Column("rating")]
     public int Rating { get; set; } = 5;
-    public string Comment { get; set; } = string.Empty;
-    public List<string> Tags { get; set; } = new();
-    public string Visit { get; set; } = string.Empty;
-    public DateTime Date { get; set; } = DateTime.UtcNow;
+
+    [Column("comment")]
+    public string Comment { get; set; } = "";
+
+    [Column("tags")]
+    public string Tags { get; set; } = "";
+
+    [Column("visit")]
+    public string Visit { get; set; } = "";
+
+    [Column("helpful")]
     public int Helpful { get; set; }
-    public bool Mine { get; set; }
+
+    [Column("is_mine")]
+    public bool Mine { get; set; } = true;
+
+    [Column("created_at")]
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    [Column("deleted_at")]
+    public DateTime? DeletedAt { get; set; }
+
+    // Helper for UI tag pills (ignored by Postgrest serializers)
+    [JsonIgnore]
+    public List<string> TagList => string.IsNullOrWhiteSpace(Tags)
+        ? new List<string>()
+        : Tags.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList();
 }

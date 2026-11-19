@@ -25,6 +25,7 @@
   - [Patient Daily Care Routine](#patient-daily-care-routine)
   - [Doctor Oversight & Consultation Loop](#doctor-oversight--consultation-loop)
 - [System Architecture & Class Diagram](#system-architecture--class-diagram)
+- [Database Schema & Storage Pattern](#database-schema--storage-pattern)
 - [Initial Domain Models](#initial-domain-models)
 - [Project Structure](#project-structure)
 - [Getting Started](#getting-started)
@@ -142,6 +143,20 @@ Enforces separation of concerns. Doctors and patients have fundamentally differe
 
 ---
 
+### 6. Therapeutic Glassmorphism Design System
+
+#### What It Does
+Employs an intentionally designed dark navy aesthetic featuring frosted glass panels, subtle glowing gradients, and fluid micro-animations.
+
+#### How It Works
+- **Visual Depth:** Uses backdrop blurring (`backdrop-blur-xl`), semi-transparent surfaces (`bg-white/10`), and delicate luminous borders (`border-white/20`).
+- **Micro-Interactions:** Custom CSS animations (`anim-fade-up`, `anim-fade-left`, `anim-float`) stagger the arrival of data cards upon page load.
+- **Card-Lift Hover Effects:** Interactive elements gently elevate (`translateY(-3px)`) when hovered, providing tactile feedback.
+
+#### Clinical Importance
+Medical dashboards can often feel sterile, intimidating, and stressful. The calming dark palette and gentle visual hierarchy reduce cognitive overload and medical anxiety for patients checking their vitals daily.
+
+---
 
 ## How DocTient Works in Practice (User Workflows)
 
@@ -205,6 +220,52 @@ Enforces separation of concerns. Doctors and patients have fundamentally differe
 
 ---
 
+## Database Schema & Storage Pattern
+
+### 1. Database Architecture & Supabase Integration
+DocTient connects to a PostgreSQL database powered by [Supabase](https://supabase.com). The database definition lives at [`database/schema.sql`](file:///c:/Users/L23Y16W38/Downloads/DocTient/database/schema.sql).
+
+- **Entities:**
+  - `public.doctor_reviews`: Doctor ratings, feedback, tags, and reviews with soft delete.
+  - `public.accounts`: Patient and Doctor user accounts, roles, specialties, authentication credentials, and login history.
+- **Primary Keys:** `id bigint generated always as identity primary key`
+- **Security:** Row Level Security (RLS) is enabled on all tables. Granular policies control client access (`read_all`, `insert_all`, `update_all`, `delete_all`).
+- **Performance:** Indexes are provisioned on search keys (`email`, `role`, `name`) and sorting keys (`created_at desc`).
+
+```sql
+create table public.doctor_reviews (
+  id bigint generated always as identity primary key,
+  name text not null,
+  initials text not null,
+  rating integer not null default 5 check (rating >= 1 and rating <= 5),
+  comment text not null,
+  tags text not null default '',
+  visit text not null,
+  helpful integer not null default 0,
+  is_mine boolean not null default true,
+  deleted_at timestamptz,                -- for soft delete
+  created_at timestamptz not null default now()
+);
+
+create index on public.doctor_reviews (name);
+create index on public.doctor_reviews (created_at desc);
+
+grant select, insert, update, delete on public.doctor_reviews to anon;
+alter table public.doctor_reviews enable row level security;
+```
+
+### 2. Storage Pattern: Soft Delete (`deleted_at`) & Why
+
+DocTient adheres to the **Soft Delete pattern** using a nullable `deleted_at timestamptz` timestamp column across all user-generated clinical and feedback records.
+
+#### Why Soft Delete is Used:
+1. **Medical Auditability & Regulatory Compliance:** Healthcare systems require immutable audit trails. Clinical notes, consultations, and patient-doctor ratings cannot simply vanish; retaining the historical record is critical for dispute resolution, quality audits, and compliance with data retention requirements.
+2. **Accidental Loss Prevention:** Soft deletes safeguard patients from accidental misclicks or deletions. The data remains intact in Postgres and can be reinstated by updating `deleted_at = NULL`.
+3. **Preserving Relational Integrity:** In healthcare systems, visits, doctor feedback, and vitals are interlinked. Hard `DELETE` operations break foreign keys or cascade deletes, which would corrupt linked records. Soft deletes preserve foreign key relationships smoothly.
+4. **PostgREST Query Performance:** Queries effortlessly exclude deleted records using `.Where(r => r.DeletedAt == null)`, ensuring fast, clean client-side responses without destroying data.
+
+---
+
 ## Initial Domain Models
 
 The models reside in [`DocTient/Models`](Models/) and strictly correspond to the currently implemented screens:
@@ -225,9 +286,13 @@ The models reside in [`DocTient/Models`](Models/) and strictly correspond to the
 
 ```text
 DocTient/
+├── database/
+│   ├── schema.sql              # Supabase table schema, RLS policies & indexes
+│   └── test.http               # REST API test query
 ├── Layout/
 │   └── MainLayout.razor        # Base layout component
 ├── Models/                     # Core domain models
+│   ├── Account.cs              # Supabase-mapped user account model
 │   ├── Doctor.cs
 │   ├── DoctorReview.cs
 │   ├── Enums.cs
@@ -237,13 +302,14 @@ DocTient/
 │   └── VitalSign.cs
 ├── Pages/                      # Currently implemented routed components
 │   ├── Dashboard.razor         # Patient health metrics & medications
-│   ├── Feedback.razor          # Doctor rating and review submission
+│   ├── Feedback.razor          # Live Supabase CRUD for doctor ratings & reviews
 │   ├── Home.razor              # Public landing page and hero section
 │   ├── Login.razor             # Role-selected authentication
 │   └── Signup.razor            # User & practitioner registration
 ├── Properties/
 │   └── launchSettings.json     # Local development server ports
 ├── wwwroot/
+│   ├── appsettings.json        # Supabase client URL and publishable key
 │   ├── css/
 │   │   └── app.css             # Glassmorphism tokens, gradients & keyframe animations
 │   ├── icon-192.png            # Application icon

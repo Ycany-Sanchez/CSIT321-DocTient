@@ -1,5 +1,6 @@
 @page "/login"
 @inject NavigationManager Nav
+@inject Supabase.Client Db
 
 <div class="min-h-screen flex items-center justify-center px-4 py-12">
     <div class="w-full max-w-sm">
@@ -15,7 +16,7 @@
                 <span class="text-xl font-bold text-white" style="font-family:'DM Sans',sans-serif">DocTient</span>
             </div>
             <h1 class="text-2xl font-bold text-white mb-1" style="font-family:'DM Sans',sans-serif">Welcome back</h1>
-            <p class="text-sm text-white/50">Sign in to your account</p>
+            <p class="text-sm text-white/50">Sign in to your account with Supabase</p>
         </div>
 
         <!-- Card -->
@@ -35,7 +36,7 @@
 
             @if (!string.IsNullOrEmpty(ErrorMsg))
             {
-                <div class="mb-4 px-4 py-3 bg-red-500/20 border border-red-500/30 rounded-xl text-sm text-red-300 backdrop-blur-sm">
+                <div class="mb-4 px-4 py-3 bg-red-500/20 border border-red-500/30 rounded-xl text-sm text-red-300 backdrop-blur-sm anim-fade-in">
                     @ErrorMsg
                 </div>
             }
@@ -91,8 +92,64 @@
             ErrorMsg = "Please fill in all fields.";
             return;
         }
+
         Loading = true;
-        await Task.Delay(800);
-        Nav.NavigateTo("/dashboard");
+        try
+        {
+            var cleanEmail = Email.Trim().ToLowerInvariant();
+
+            if (Role == "patient")
+            {
+                var res = await Db.From<Patient>()
+                    .Where(p => p.Email == cleanEmail && p.DeletedAt == null)
+                    .Get();
+
+                var patient = res.Models?.FirstOrDefault();
+
+                if (patient == null || patient.Password != Password)
+                {
+                    ErrorMsg = "Invalid patient email or password.";
+                    Loading = false;
+                    return;
+                }
+
+                // Update last_login_at in patients table
+                await Db.From<Patient>()
+                    .Where(p => p.Id == patient.Id)
+                    .Set(p => p.LastLoginAt!, DateTime.UtcNow)
+                    .Update();
+            }
+            else
+            {
+                var res = await Db.From<Doctor>()
+                    .Where(d => d.Email == cleanEmail && d.DeletedAt == null)
+                    .Get();
+
+                var doctor = res.Models?.FirstOrDefault();
+
+                if (doctor == null || doctor.Password != Password)
+                {
+                    ErrorMsg = "Invalid doctor email or password.";
+                    Loading = false;
+                    return;
+                }
+
+                // Update last_login_at in doctors table
+                await Db.From<Doctor>()
+                    .Where(d => d.Id == doctor.Id)
+                    .Set(d => d.LastLoginAt!, DateTime.UtcNow)
+                    .Update();
+            }
+
+            Nav.NavigateTo("/dashboard");
+        }
+        catch (Exception ex)
+        {
+            ErrorMsg = $"Login error: {ex.Message}";
+        }
+        finally
+        {
+            Loading = false;
+        }
     }
 }

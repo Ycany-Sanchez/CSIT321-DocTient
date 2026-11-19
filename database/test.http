@@ -1,0 +1,14 @@
+@url = https://dofjiwaoyggaocgbaayn.supabase.co
+@key = sb_publishable_fr3OLBoYA2qqk6nqNQiZIQ_7FGmH_w4
+
+### 1. Test Doctor Reviews
+GET {{url}}/rest/v1/doctor_reviews?select=*
+apikey: {{key}}
+
+### 2. Test Patients Table
+GET {{url}}/rest/v1/patients?select=*
+apikey: {{key}}
+
+### 3. Test Doctors Table
+GET {{url}}/rest/v1/doctors?select=*
+apikey: {{key}}
