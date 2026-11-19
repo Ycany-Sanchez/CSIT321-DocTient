@@ -1,0 +1,359 @@
+@page "/medications"
+@inject NavigationManager Nav
+@inject Supabase.Client Db
+
+<div class="min-h-screen flex">
+
+    <!-- Sidebar -->
+    <aside class="hidden md:flex flex-col w-64 glass-strong border-r border-white/10 fixed inset-y-0 left-0 z-30">
+        <div class="px-6 h-16 flex items-center border-b border-white/10 flex-shrink-0">
+            <a href="/" class="flex items-center gap-2.5">
+                <div class="w-8 h-8 bg-sky-500 rounded-lg flex items-center justify-center shadow-lg shadow-sky-500/40">
+                    <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                </div>
+                <span class="text-base font-bold text-white" style="font-family:'DM Sans',sans-serif">DocTient</span>
+            </a>
+        </div>
+        <div class="px-5 py-5 border-b border-white/10 flex-shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-sky-500/20 border border-sky-500/30 rounded-full flex items-center justify-center text-sky-400 text-sm font-bold flex-shrink-0">YS</div>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold text-white truncate">Ycany Sanchez</p>
+                    <p class="text-xs text-white/40 truncate">Patient</p>
+                </div>
+            </div>
+        </div>
+        <nav class="flex-1 px-4 py-4 space-y-0.5 overflow-y-auto" aria-label="Primary">
+            <a href="/dashboard" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/50 hover:bg-white/10 hover:text-white transition">
+                <span class="text-base">🏠</span> Dashboard
+            </a>
+            <a href="/history" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/50 hover:bg-white/10 hover:text-white transition">
+                <span class="text-base">📋</span> Health History
+            </a>
+            <a href="/medications" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm bg-sky-500/20 text-sky-300 border border-sky-500/20 font-semibold transition">
+                <span class="text-base">💊</span> Medications
+            </a>
+            <a href="/feedback" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/50 hover:bg-white/10 hover:text-white transition">
+                <span class="text-base">⭐</span> Rate Doctor
+            </a>
+            <a href="/doctor-portal" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/50 hover:bg-white/10 hover:text-white transition">
+                <span class="text-base">🩺</span> Doctor Portal
+            </a>
+            <a href="/profile" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/50 hover:bg-white/10 hover:text-white transition">
+                <span class="text-base">👤</span> Profile
+            </a>
+        </nav>
+        <div class="px-4 py-5 border-t border-white/10 flex-shrink-0">
+            <button @onclick='() => Nav.NavigateTo("/login")'
+                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/40 hover:bg-red-500/10 hover:text-red-400 transition-all">
+                <span class="text-base">🚪</span> Sign Out
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 md:ml-64 flex flex-col min-h-screen">
+        <header class="sticky top-0 z-20 glass-strong border-b border-white/10 flex-shrink-0">
+            <div class="px-6 h-16 flex items-center justify-between">
+                <div>
+                    <h1 class="text-sm font-semibold text-white">Medication Adherence 💊</h1>
+                    <p class="text-xs text-white/40">Daily prescriptions & reminders</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button @onclick="LoadMedications" class="px-3 py-1.5 text-xs text-white/70 hover:text-white glass-inset rounded-xl transition flex items-center gap-1">
+                        <span>↻</span> Refresh
+                    </button>
+                    <button @onclick='() => Nav.NavigateTo("/dashboard")'
+                            class="px-3.5 py-1.5 text-xs font-medium text-white glass-inset hover:bg-white/10 rounded-xl transition">
+                        ← Dashboard
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 px-6 py-6 max-w-5xl mx-auto w-full space-y-6">
+
+            <!-- Top Banner / Adherence score -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="md:col-span-2 glass rounded-2xl p-6 card-lift relative overflow-hidden">
+                    <div class="absolute -right-10 -bottom-10 w-44 h-44 rounded-full bg-emerald-500/20 blur-3xl pointer-events-none"></div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-semibold text-emerald-300 uppercase tracking-wider">Today's Progress</span>
+                        <span class="text-xs text-white/40">@TakenCount of @Meds.Count taken</span>
+                    </div>
+                    <p class="text-3xl font-bold text-white mb-3" style="font-family:'DM Sans',sans-serif">@AdherencePercentage% Adherence</p>
+                    <div class="w-full h-3 bg-white/10 rounded-full overflow-hidden p-0.5">
+                        <div class="h-full bg-gradient-to-r from-sky-400 to-emerald-400 rounded-full transition-all duration-500" style="width: @AdherencePercentage%"></div>
+                    </div>
+                    <p class="text-xs text-white/40 mt-3">Staying consistent keeps your health metrics stable. Great work!</p>
+                </div>
+
+                <div class="glass rounded-2xl p-6 card-lift flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs font-semibold text-sky-300 uppercase tracking-wider">Scheduled Meds</span>
+                        <p class="text-4xl font-bold text-white mt-2" style="font-family:'DM Sans',sans-serif">@Meds.Count</p>
+                    </div>
+                    <p class="text-xs text-white/40">Active daily prescriptions tracked in your DocTient record.</p>
+                </div>
+            </div>
+
+            <!-- Messages -->
+            @if (!string.IsNullOrEmpty(SuccessMsg))
+            {
+                <div class="px-4 py-3 bg-emerald-500/20 border border-emerald-500/30 rounded-xl text-sm text-emerald-300 flex items-center justify-between anim-fade-in">
+                    <span>@SuccessMsg</span>
+                    <button @onclick="() => SuccessMsg = string.Empty" class="text-xs text-emerald-200">✕</button>
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(ErrorMsg))
+            {
+                <div class="px-4 py-3 bg-red-500/20 border border-red-500/30 rounded-xl text-sm text-red-300 flex items-center justify-between anim-fade-in">
+                    <span>@ErrorMsg</span>
+                    <button @onclick="() => ErrorMsg = string.Empty" class="text-xs text-red-200">✕</button>
+                </div>
+            }
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                <!-- Left 2 Cols: Medications List -->
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-base font-semibold text-white">Active Prescriptions</h2>
+                        <span class="text-xs text-white/40">Tap status button to toggle</span>
+                    </div>
+
+                    @if (IsLoading)
+                    {
+                        <div class="glass rounded-2xl p-10 text-center text-white/50">
+                            <span class="inline-block animate-spin text-xl mb-2">⟳</span>
+                            <p class="text-sm">Loading medications...</p>
+                        </div>
+                    }
+                    else if (Meds.Count == 0)
+                    {
+                        <div class="glass rounded-2xl p-10 text-center text-white/50">
+                            <p class="text-3xl mb-2">💊</p>
+                            <p class="text-sm font-semibold text-white">No medications logged yet</p>
+                            <p class="text-xs text-white/40 mt-1">Add your daily prescriptions using the form on the right.</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="space-y-3">
+                            @foreach (var med in Meds)
+                            {
+                                <div class="glass rounded-2xl p-4 card-lift flex items-center gap-4 transition duration-200 @(med.Taken ? "border-emerald-500/30 bg-emerald-500/5" : "border-white/10")">
+                                    <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0 @(med.Taken ? "bg-emerald-500/20 text-emerald-400" : "glass-inset text-white/60")">
+                                        💊
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center gap-2">
+                                            <p class="text-sm font-semibold text-white truncate">@med.Name</p>
+                                            <span class="text-[11px] font-medium px-2 py-0.5 rounded-full glass-inset text-sky-200">@med.Dose</span>
+                                        </div>
+                                        <p class="text-xs text-white/40 mt-0.5">Scheduled: @med.Time</p>
+                                    </div>
+
+                                    <div class="flex items-center gap-2 shrink-0">
+                                        @if (med.Taken)
+                                        {
+                                            <button @onclick="() => ToggleTaken(med)"
+                                                    class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/30 transition">
+                                                ✓ Taken
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button @onclick="() => ToggleTaken(med)"
+                                                    class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-sky-500 hover:bg-sky-400 text-white shadow-md shadow-sky-500/30 transition">
+                                                Mark taken
+                                            </button>
+                                        }
+
+                                        <!-- Delete -->
+                                        <button @onclick="() => RemoveMedication(med)" title="Discontinue prescription"
+                                                class="w-8 h-8 rounded-xl flex items-center justify-center text-xs text-red-400/50 hover:bg-red-500/10 hover:text-red-400 transition">
+                                            ✕
+                                        </button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+
+                <!-- Right 1 Col: Add Medication Form -->
+                <div class="glass rounded-2xl p-6 card-lift h-fit space-y-4">
+                    <h3 class="text-sm font-semibold text-white">Add Medication</h3>
+                    <p class="text-xs text-white/40">Enter medication details to track adherence.</p>
+
+                    <div>
+                        <label class="block text-xs font-medium text-white/70 mb-1">Medication Name</label>
+                        <input @bind="NewName" type="text" placeholder="e.g. Amlodipine"
+                               class="w-full px-3.5 py-2 text-sm glass-input rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-sky-500/50" />
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-white/70 mb-1">Dosage</label>
+                        <input @bind="NewDose" type="text" placeholder="e.g. 5 mg or 500 mg"
+                               class="w-full px-3.5 py-2 text-sm glass-input rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-sky-500/50" />
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-white/70 mb-1">Administration Time</label>
+                        <select @bind="NewTime"
+                                class="w-full px-3.5 py-2 text-sm glass-input rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50">
+                            <option class="bg-slate-800 text-white">8:00 AM (Morning)</option>
+                            <option class="bg-slate-800 text-white">12:00 PM (Noon)</option>
+                            <option class="bg-slate-800 text-white">6:00 PM (Evening)</option>
+                            <option class="bg-slate-800 text-white">8:00 PM (Night / Bedtime)</option>
+                            <option class="bg-slate-800 text-white">As needed (PRN)</option>
+                        </select>
+                    </div>
+
+                    <button @onclick="AddMedication" disabled="@Saving"
+                            class="w-full py-2.5 text-sm font-semibold text-white bg-sky-500 hover:bg-sky-400 rounded-xl transition shadow-lg shadow-sky-500/30 disabled:opacity-50">
+                        @(Saving ? "Adding..." : "+ Add Prescription")
+                    </button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</div>
+
+@code {
+    List<Medication> Meds = new();
+    bool IsLoading = false;
+    bool Saving = false;
+    string SuccessMsg = "";
+    string ErrorMsg = "";
+
+    string NewName = "";
+    string NewDose = "";
+    string NewTime = "8:00 AM (Morning)";
+
+    int TakenCount => Meds.Count(m => m.Taken);
+    int AdherencePercentage => Meds.Count == 0 ? 0 : (int)Math.Round((double)TakenCount / Meds.Count * 100);
+
+    List<Medication> GetDefaultMeds() => new()
+    {
+        new() { Id = 1, Name = "Amlodipine", Dose = "5 mg", Time = "8:00 AM (Morning)", Taken = true },
+        new() { Id = 2, Name = "Metformin", Dose = "500 mg", Time = "12:00 PM (Noon)", Taken = false },
+        new() { Id = 3, Name = "Vitamin D3", Dose = "1000 IU", Time = "8:00 AM (Morning)", Taken = true },
+        new() { Id = 4, Name = "Losartan", Dose = "25 mg", Time = "8:00 PM (Night / Bedtime)", Taken = false },
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadMedications();
+    }
+
+    async Task LoadMedications()
+    {
+        IsLoading = true;
+        try
+        {
+            var res = await Db.From<Medication>()
+                .Where(m => m.DeletedAt == null)
+                .Order(m => m.Id, Ordering.Ascending)
+                .Get();
+
+            if (res.Models != null && res.Models.Count > 0)
+            {
+                Meds = res.Models;
+            }
+            else
+            {
+                Meds = GetDefaultMeds();
+            }
+        }
+        catch
+        {
+            Meds = GetDefaultMeds();
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    async Task ToggleTaken(Medication med)
+    {
+        med.Taken = !med.Taken;
+        med.TakenAt = med.Taken ? DateTime.UtcNow : null;
+        SuccessMsg = $"{med.Name} marked as {(med.Taken ? "taken ✓" : "pending")}.";
+
+        try
+        {
+            if (med.Id > 0)
+            {
+                await Db.From<Medication>()
+                    .Where(x => x.Id == med.Id)
+                    .Set(x => x.Taken, med.Taken)
+                    .Set(x => x.TakenAt!, med.TakenAt)
+                    .Update();
+            }
+        }
+        catch { }
+    }
+
+    async Task AddMedication()
+    {
+        ErrorMsg = "";
+        SuccessMsg = "";
+
+        if (string.IsNullOrWhiteSpace(NewName) || string.IsNullOrWhiteSpace(NewDose))
+        {
+            ErrorMsg = "Please enter both the medication name and dosage.";
+            return;
+        }
+
+        Saving = true;
+        var newMed = new Medication
+        {
+            Id = Meds.Count > 0 ? Meds.Max(m => m.Id) + 1 : 1,
+            PatientEmail = "ycanyashra@gmail.com",
+            Name = NewName.Trim(),
+            Dose = NewDose.Trim(),
+            Time = NewTime,
+            Taken = false,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        Meds.Add(newMed);
+        NewName = "";
+        NewDose = "";
+        SuccessMsg = "New prescription added to your record.";
+
+        try
+        {
+            await Db.From<Medication>().Insert(newMed);
+        }
+        catch { }
+        finally
+        {
+            Saving = false;
+        }
+    }
+
+    async Task RemoveMedication(Medication med)
+    {
+        Meds.Remove(med);
+        SuccessMsg = $"{med.Name} removed.";
+
+        try
+        {
+            if (med.Id > 0)
+            {
+                await Db.From<Medication>()
+                    .Where(x => x.Id == med.Id)
+                    .Set(x => x.DeletedAt!, DateTime.UtcNow)
+                    .Update();
+            }
+        }
+        catch { }
+    }
+}

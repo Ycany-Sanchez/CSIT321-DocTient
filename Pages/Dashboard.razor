@@ -280,8 +280,7 @@
 
             <!-- Medication Reminders -->
             <div class="glass rounded-2xl overflow-hidden card-lift anim-fade-up delay-600">
-                <div class="px-5 py-4 border-b border-white/10">
-                    <p class="text-sm font-semibold text-white">Medication Reminders</p>
+                <div class="px-5 py-4 border-b border-white/10 flex items-center justify-between"><p class="text-sm font-semibold text-white">Medication Reminders</p><a href="/medications" class="text-xs text-sky-400 hover:text-sky-300 transition">Manage All &rarr;</a>
                 </div>
                 <div class="p-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
                     @foreach (var m in Meds)
@@ -326,7 +325,7 @@
         new("fa-solid fa-house", "Dashboard",      "/dashboard", true),
         new("fa-solid fa-heart-pulse",  "My Health",     "#",          false),
         new("fa-solid fa-clipboard-list", "Health History", "#",          false),
-        new("fa-solid fa-pills",    "Medications",    "#",          false),
+        new("fa-solid fa-pills",    "Medications",    "/medications", false),
         new("fa-solid fa-star", "Rate Doctor",    "/feedback",  false),
         new("fa-solid fa-comments",       "Messages",       "#",          false),
         new("fa-solid fa-user",         "Profile",        "#",          false),
@@ -355,3 +354,4 @@
         new() { Name = "Losartan",   Dose = "25 mg",   Time = "8:00 PM",  Taken = false },
     ];
 }
+
