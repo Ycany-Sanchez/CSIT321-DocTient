@@ -1,0 +1,266 @@
+@page "/doctor-portal"
+@inject NavigationManager Nav
+
+<div class="min-h-screen flex">
+
+    <!-- Sidebar -->
+    <aside class="hidden md:flex flex-col w-64 glass-strong border-r border-white/10 fixed inset-y-0 left-0 z-30">
+        <div class="px-6 h-16 flex items-center border-b border-white/10 flex-shrink-0">
+            <a href="/" class="flex items-center gap-2.5">
+                <div class="w-8 h-8 bg-sky-500 rounded-lg flex items-center justify-center shadow-lg shadow-sky-500/40">
+                    <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                </div>
+                <span class="text-base font-bold text-white" style="font-family:'DM Sans',sans-serif">DocTient</span>
+            </a>
+        </div>
+        <div class="px-5 py-5 border-b border-white/10 flex-shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-emerald-500/20 border border-emerald-500/30 rounded-full flex items-center justify-center text-emerald-400 text-sm font-bold flex-shrink-0">RC</div>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold text-white truncate">Dr. Rafael Cruz</p>
+                    <p class="text-xs text-emerald-400/80 truncate">General Practitioner</p>
+                </div>
+            </div>
+        </div>
+        <nav class="flex-1 px-4 py-4 space-y-0.5 overflow-y-auto" aria-label="Primary">
+            <a href="/doctor-portal" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm bg-sky-500/20 text-sky-300 border border-sky-500/20 font-semibold transition">
+                <span class="text-base">🩺</span> Doctor Portal
+            </a>
+            <a href="/dashboard" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/50 hover:bg-white/10 hover:text-white transition">
+                <span class="text-base">🏠</span> Patient View
+            </a>
+            <a href="/history" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/50 hover:bg-white/10 hover:text-white transition">
+                <span class="text-base">📋</span> Health History
+            </a>
+            <a href="/medications" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/50 hover:bg-white/10 hover:text-white transition">
+                <span class="text-base">💊</span> Medications
+            </a>
+            <a href="/feedback" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/50 hover:bg-white/10 hover:text-white transition">
+                <span class="text-base">⭐</span> Patient Reviews
+            </a>
+            <a href="/profile" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/50 hover:bg-white/10 hover:text-white transition">
+                <span class="text-base">👤</span> Profile
+            </a>
+        </nav>
+        <div class="px-4 py-5 border-t border-white/10 flex-shrink-0">
+            <button @onclick='() => Nav.NavigateTo("/login")'
+                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/40 hover:bg-red-500/10 hover:text-red-400 transition-all">
+                <span class="text-base">🚪</span> Sign Out
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 md:ml-64 flex flex-col min-h-screen">
+        <header class="sticky top-0 z-20 glass-strong border-b border-white/10 flex-shrink-0">
+            <div class="px-6 h-16 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Doctor Oversight</span>
+                    <h1 class="text-sm font-semibold text-white">Clinical Panel 🩺</h1>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button @onclick='() => Nav.NavigateTo("/dashboard")'
+                            class="px-3.5 py-1.5 text-xs font-medium text-white glass-inset hover:bg-white/10 rounded-xl transition">
+                        ← Patient Dashboard
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 px-6 py-6 max-w-6xl mx-auto w-full space-y-6">
+
+            <!-- Doctor Overview Stats -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="glass rounded-2xl p-5 card-lift">
+                    <p class="text-xs font-semibold text-white/40 uppercase tracking-wider mb-1">Active Patients</p>
+                    <p class="text-3xl font-bold text-white" style="font-family:'DM Sans',sans-serif">@Patients.Count</p>
+                    <p class="text-xs text-emerald-400 mt-1">● Continuous Monitoring</p>
+                </div>
+
+                <div class="glass rounded-2xl p-5 card-lift">
+                    <p class="text-xs font-semibold text-white/40 uppercase tracking-wider mb-1">Weekly Checkups</p>
+                    <p class="text-3xl font-bold text-sky-300" style="font-family:'DM Sans',sans-serif">18</p>
+                    <p class="text-xs text-white/40 mt-1">Next: Today, 2:30 PM</p>
+                </div>
+
+                <div class="glass rounded-2xl p-5 card-lift">
+                    <p class="text-xs font-semibold text-white/40 uppercase tracking-wider mb-1">Adherence Alert</p>
+                    <p class="text-3xl font-bold text-amber-300" style="font-family:'DM Sans',sans-serif">1 <span class="text-xs font-normal text-white/50">reviewing</span></p>
+                    <p class="text-xs text-amber-300/80 mt-1">Jose D. missed noon dose</p>
+                </div>
+
+                <div class="glass rounded-2xl p-5 card-lift">
+                    <p class="text-xs font-semibold text-white/40 uppercase tracking-wider mb-1">Patient Rating</p>
+                    <p class="text-3xl font-bold text-amber-400" style="font-family:'DM Sans',sans-serif">4.8 ★</p>
+                    <p class="text-xs text-white/40 mt-1">Based on feedback reviews</p>
+                </div>
+            </div>
+
+            <!-- Messages -->
+            @if (!string.IsNullOrEmpty(SuccessMsg))
+            {
+                <div class="px-4 py-3 bg-emerald-500/20 border border-emerald-500/30 rounded-xl text-sm text-emerald-300 flex items-center justify-between anim-fade-in">
+                    <span>@SuccessMsg</span>
+                    <button @onclick="() => SuccessMsg = string.Empty" class="text-xs text-emerald-200">✕</button>
+                </div>
+            }
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+                <!-- Left 5 cols: Patient Directory -->
+                <div class="lg:col-span-5 space-y-4">
+                    <h2 class="text-base font-semibold text-white">Connected Patients</h2>
+                    <div class="space-y-3">
+                        @foreach (var p in Patients)
+                        {
+                            var selected = SelectedPatient.Id == p.Id;
+                            <div @onclick="() => SelectPatient(p)"
+                                 class="glass rounded-2xl p-4 card-lift cursor-pointer transition duration-200 border @(selected ? "border-sky-500/50 bg-sky-500/10" : "border-white/10 hover:border-white/20")">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-11 h-11 rounded-full flex items-center justify-center text-xs font-bold shrink-0 @(selected ? "bg-sky-500 text-white" : "glass-inset text-white/70")">
+                                        @p.Initials
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center justify-between">
+                                            <p class="text-sm font-semibold text-white truncate">@p.Name</p>
+                                            <span class="text-[10px] font-medium px-2 py-0.5 rounded-full @(p.Status == "Normal" ? "bg-emerald-500/20 text-emerald-300" : "bg-amber-500/20 text-amber-300")">
+                                                @p.Status
+                                            </span>
+                                        </div>
+                                        <p class="text-xs text-white/40 truncate">BP: @p.LatestBP · HR: @p.LatestHR bpm</p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Right 7 cols: Detailed Patient Inspection & Clinical Advice -->
+                <div class="lg:col-span-7 space-y-4">
+                    <div class="glass rounded-2xl p-6 card-lift space-y-5">
+                        <div class="flex items-center justify-between pb-4 border-b border-white/10">
+                            <div>
+                                <h3 class="text-lg font-bold text-white">@SelectedPatient.Name</h3>
+                                <p class="text-xs text-white/50">Primary condition: @SelectedPatient.Condition · Age @SelectedPatient.Age</p>
+                            </div>
+                            <span class="text-xs text-sky-400 glass-inset px-3 py-1 rounded-full">Active Record</span>
+                        </div>
+
+                        <!-- Vitals Grid -->
+                        <div>
+                            <p class="text-xs font-semibold text-white/40 uppercase tracking-wider mb-2.5">Latest Vitals Telemetry</p>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                <div class="glass-inset rounded-xl p-3 text-center">
+                                    <span class="text-[10px] text-white/40 block">Blood Pressure</span>
+                                    <span class="text-sm font-bold text-white">@SelectedPatient.LatestBP</span>
+                                    <span class="text-[10px] text-emerald-400 block mt-0.5">Optimal</span>
+                                </div>
+                                <div class="glass-inset rounded-xl p-3 text-center">
+                                    <span class="text-[10px] text-white/40 block">Heart Rate</span>
+                                    <span class="text-sm font-bold text-white">@SelectedPatient.LatestHR bpm</span>
+                                    <span class="text-[10px] text-emerald-400 block mt-0.5">Steady</span>
+                                </div>
+                                <div class="glass-inset rounded-xl p-3 text-center">
+                                    <span class="text-[10px] text-white/40 block">Oxygen (SpO2)</span>
+                                    <span class="text-sm font-bold text-white">@SelectedPatient.LatestOxygen%</span>
+                                    <span class="text-[10px] text-emerald-400 block mt-0.5">Optimal</span>
+                                </div>
+                                <div class="glass-inset rounded-xl p-3 text-center">
+                                    <span class="text-[10px] text-white/40 block">Weight</span>
+                                    <span class="text-sm font-bold text-white">@SelectedPatient.LatestWeight kg</span>
+                                    <span class="text-[10px] text-amber-300 block mt-0.5">Monitor</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Medication Adherence -->
+                        <div>
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-xs font-semibold text-white/40 uppercase tracking-wider">Regimen Adherence</span>
+                                <span class="text-xs text-emerald-400 font-semibold">@SelectedPatient.AdherenceRate%</span>
+                            </div>
+                            <div class="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                                <div class="h-full bg-emerald-400 rounded-full" style="width: @SelectedPatient.AdherenceRate%"></div>
+                            </div>
+                            <p class="text-xs text-white/40 mt-1.5">Active Prescriptions: @SelectedPatient.MedsSummary</p>
+                        </div>
+
+                        <!-- Consultation Advice Form -->
+                        <div class="pt-4 border-t border-white/10 space-y-3">
+                            <label class="block text-sm font-semibold text-white">Send Clinical Advice / Care Note</label>
+                            <p class="text-xs text-white/40">This message displays directly on the patient's dashboard.</p>
+
+                            <!-- Quick preset buttons -->
+                            <div class="flex gap-2 flex-wrap">
+                                <button @onclick='() => SetPreset("Your blood pressure looks steady this week — keep logging daily!")'
+                                        class="px-2.5 py-1 text-[11px] rounded-lg glass-inset text-sky-200 hover:text-white transition">
+                                    + Steady Vitals
+                                </button>
+                                <button @onclick='() => SetPreset("Remember to take your noon Metformin dose with food.")'
+                                        class="px-2.5 py-1 text-[11px] rounded-lg glass-inset text-sky-200 hover:text-white transition">
+                                    + Medication Reminder
+                                </button>
+                                <button @onclick='() => SetPreset("Let us schedule our quarterly lab checkup next Monday.")'
+                                        class="px-2.5 py-1 text-[11px] rounded-lg glass-inset text-sky-200 hover:text-white transition">
+                                    + Schedule Follow-up
+                                </button>
+                            </div>
+
+                            <textarea @bind="AdviceText" rows="3"
+                                      placeholder="Write specific clinical guidance or encouragement for this patient..."
+                                      class="w-full px-3.5 py-2.5 text-sm glass-input rounded-xl text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-sky-500/50 resize-none"></textarea>
+
+                            <button @onclick="SendAdvice"
+                                    class="w-full py-2.5 text-sm font-semibold text-white bg-sky-500 hover:bg-sky-400 rounded-xl transition shadow-lg shadow-sky-500/30">
+                                📨 Post Clinical Note to Patient
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</div>
+
+@code {
+    record PatientRecord(int Id, string Name, string Initials, string Condition, int Age, string LatestBP, int LatestHR, int LatestOxygen, double LatestWeight, int AdherenceRate, string MedsSummary, string Status);
+
+    List<PatientRecord> Patients = new()
+    {
+        new(1, "Ycany Sanchez", "YS", "Mild Hypertension", 22, "118/76", 72, 98, 68.2, 85, "Amlodipine 5mg, Vitamin D3", "Normal"),
+        new(2, "Alex Reyes", "AR", "Routine Monitoring", 24, "120/78", 74, 99, 67.0, 90, "Multivitamins daily", "Normal"),
+        new(3, "Jose Dela Cruz", "JD", "Type 2 Diabetes", 58, "134/86", 82, 96, 78.4, 60, "Metformin 500mg, Losartan 25mg", "Monitor"),
+        new(4, "Maria Santos", "MS", "Asthma & Bronchitis", 34, "116/74", 76, 98, 55.0, 95, "Albuterol Inhaler (PRN)", "Normal"),
+    };
+
+    PatientRecord SelectedPatient = null!;
+    string AdviceText = "";
+    string SuccessMsg = "";
+
+    protected override void OnInitialized()
+    {
+        SelectedPatient = Patients[0];
+    }
+
+    void SelectPatient(PatientRecord p)
+    {
+        SelectedPatient = p;
+        AdviceText = "";
+    }
+
+    void SetPreset(string text)
+    {
+        AdviceText = text;
+    }
+
+    void SendAdvice()
+    {
+        if (string.IsNullOrWhiteSpace(AdviceText)) return;
+        SuccessMsg = $"Clinical care note delivered to {SelectedPatient.Name}'s dashboard.";
+        AdviceText = "";
+    }
+}
+
